@@ -1,5 +1,6 @@
 ---
 import type { DayInfo, Holiday } from '../../lib/types';
+import { AVAILABLE_YEARS } from '../../lib/year';
 
 interface Props {
     year: number;
@@ -36,12 +37,19 @@ void days;
         </div>
         <div class="flex flex-wrap items-center gap-space-sm shrink-0">
             <div class="inline-flex p-1 rounded-full bg-surface-container-high shadow-inner" role="tablist">
-                <a href={`?year=${year - 1}`} class="px-5 py-2 rounded-full font-callout text-callout text-on-surface-variant hover:text-on-surface transition-all no-underline">
-                    {year - 1}
-                </a>
-                <span class="px-5 py-2 rounded-full font-callout text-callout font-semibold bg-surface-container-lowest text-on-surface shadow-sm transition-all">
-                    {year}
-                </span>
+                {
+                    AVAILABLE_YEARS.map((y) =>
+                        y === year ? (
+                            <span aria-current="page" class="px-5 py-2 rounded-full font-callout text-callout font-semibold bg-surface-container-lowest text-on-surface shadow-sm transition-all">
+                                {y}
+                            </span>
+                        ) : (
+                            <a href={`?year=${y}`} class="px-5 py-2 rounded-full font-callout text-callout text-on-surface-variant hover:text-on-surface transition-all no-underline">
+                                {y}
+                            </a>
+                        )
+                    )
+                }
             </div>
             <div class="hidden sm:flex items-center gap-1 p-1 rounded-full bg-surface-container-high">
                 <button class="px-3.5 py-1.5 rounded-full font-caption-1 text-caption-1 font-semibold bg-surface-container-lowest text-primary shadow-sm cursor-pointer" id="btn-filter-all" type="button">

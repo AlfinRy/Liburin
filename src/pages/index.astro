@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getHolidays } from '../lib/holiday';
+import { resolveYear } from '../lib/year';
 import { buildCalendar, findBridges, topBridges } from '../lib/engine';
 import HeroSection from '../components/beranda/HeroSection.astro';
 import StatsSection from '../components/beranda/StatsSection.astro';
@@ -8,7 +9,7 @@ import RecommendationPreview from '../components/beranda/RecommendationPreview.a
 import CalculatorSection from '../components/beranda/CalculatorSection.astro';
 import HowItWorks from '../components/beranda/HowItWorks.astro';
 
-const year = Number(Astro.url.searchParams.get('year')) || new Date().getFullYear();
+const year = resolveYear(Astro.url.searchParams.get('year'));
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
 const top = topBridges(days, 3);

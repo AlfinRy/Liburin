@@ -1,4 +1,6 @@
 ---
+import { AVAILABLE_YEARS } from '../lib/year';
+
 interface Props {
     activePath?: 'beranda' | 'hitung-cuti' | 'rekomendasi' | 'kalender-tahunan';
     year?: number;
@@ -13,8 +15,7 @@ const navItems: Array<{ path: string; label: string; href: string }> = [
     { path: 'kalender-tahunan', label: 'Kalender Tahunan', href: `/kalender-tahunan?year=${year}` },
 ];
 
-const currentYear = new Date().getFullYear();
-const yearOptions = [currentYear - 1, currentYear];
+const yearOptions = AVAILABLE_YEARS;
 ---
 
 <header class="fixed top-0 left-0 right-0 z-50 bg-surface/85 border-b border-surface-container-high/80 backdrop-blur-xl backdrop-saturate-150">

@@ -1,5 +1,6 @@
 ---
 import type { Bridge, DayInfo } from '../../lib/types';
+import type { DailyImage } from '../../lib/unsplash';
 import { idDate } from '../../lib/format';
 
 interface Props {
@@ -7,9 +8,11 @@ interface Props {
     days: DayInfo[];
     quota: number;
     featured?: boolean;
+    images?: Array<DailyImage | null>;
 }
 
-const { bridge, days, quota, featured = false } = Astro.props;
+const { bridge, days, quota, featured = false, images = [] } = Astro.props;
+void quota;
 const leaveSet = new Set(bridge.leaveDates);
 const byDate = new Map(days.map((d) => [d.date, d]));
 
@@ -42,7 +45,13 @@ const cell = (day: DayInfo) => {
 };
 
 const category = bridge.streakDays > 7 ? 'super' : 'weekend';
-const eventNames = [...new Set(streak.filter((d) => d.name).map((d) => d.name!))].slice(0, 2).join(' & ');
+const eventNames = [...new Set(streak.filter((d) => d.name).map((d) => d.name!))];
+const multiEvent = eventNames.length > 1;
+const headlineEvents = eventNames.slice(0, 2);
+const photos = images
+    .filter((p): p is DailyImage => p !== null)
+    .filter((p, i, a) => a.findIndex((x) => x.url === p.url) === i);
+const collage = multiEvent && photos.length >= 2;
 const compact = streak.length > 10;
 const stripClass = compact
     ? 'grid grid-cols-8 sm:grid-cols-12 gap-1 w-full'
@@ -50,52 +59,110 @@ const stripClass = compact
 ---
 
 <article
-    class={`recommendation-card rounded-xl p-space-md md:p-space-lg border border-surface-container-high transition-colors duration-200 hover:border-outline-variant bg-surface-container-lowest ${featured ? '' : ''}`}
+    class="recommendation-card rounded-2xl border border-surface-container-high bg-surface-container-lowest shadow-tint hover:shadow-tint-lg transition-all duration-200 overflow-hidden flex flex-col"
     data-category={`${category} efficiency`}
     data-period={`${idDate(bridge.streakStart)} - ${idDate(bridge.streakEnd)}`}
     data-reveal
 >
-    <div class="flex flex-col gap-space-md">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
-            <div class="flex flex-wrap items-center gap-2">
-                {
-                    featured ? (
-                        <span class="font-caption-1 text-caption-1 font-semibold text-primary">
-                            Terbaik
-                        </span>
-                    ) : (
-                        <span class="font-caption-1 text-caption-1 text-on-surface-variant">
-                            {eventNames || 'Periode libur'}
-                        </span>
-                    )
-                }
-            </div>
-            <div class="text-left sm:text-right">
-                <span class="font-headline-2 text-headline-2 font-bold text-on-surface tabular-nums">
-                    {bridge.leaveDates.length} cuti → {bridge.streakDays} hari
-                </span>
+    <div class="grid md:grid-cols-12 flex-1">
+        <div
+            class:list={[
+                'relative min-h-[200px] md:col-span-4 md:row-span-1 overflow-hidden',
+                photos.length ? '' : 'bg-gradient-to-br from-primary/85 via-primary-container to-tertiary/70',
+            ]}
+        >
+            {
+                collage ? (
+                    <div class="absolute inset-0 flex">
+                        {photos.slice(0, 2).map((photo) => (
+                            <img
+                                src={photo.url}
+                                alt={photo.alt}
+                                class="w-1/2 h-full object-cover"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        ))}
+                    </div>
+                ) : photos[0] ? (
+                    <img
+                        src={photos[0].url}
+                        alt={photos[0].alt}
+                        class="absolute inset-0 h-full w-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    />
+                ) : null
+            }
+            {collage && <div class="absolute inset-y-0 left-1/2 w-[2px] -translate-x-1/2 bg-white/25" aria-hidden="true"></div>}
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/5" aria-hidden="true"></div>
+
+            <div class="absolute inset-x-0 bottom-0 p-space-md md:p-space-lg">
+                <div class="flex flex-wrap items-center gap-1.5 mb-1">
+                    {
+                        featured && (
+                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 text-white font-caption-1 text-caption-1 font-semibold">
+                                Terbaik
+                            </span>
+                        )
+                    }
+                    {
+                        multiEvent && (
+                            <span class="inline-block px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/30 text-white/90 font-caption-1 text-caption-1 font-semibold">
+                                Libur rangkap · {eventNames.length} acara
+                            </span>
+                        )
+                    }
+                    {
+                        !featured && !multiEvent && eventNames.length === 1 && (
+                            <span class="font-caption-2 text-caption-2 uppercase tracking-wide text-white/75 font-semibold">
+                                Periode libur
+                            </span>
+                        )
+                    }
+                </div>
+                <h2 class="font-headline-3 text-headline-3 font-semibold text-white mt-1 mb-0.5">
+                    {
+                        headlineEvents.length > 0 ? (
+                            headlineEvents.map((name, i) => (
+                                <Fragment>
+                                    {i > 0 && <span class="text-white/55 font-normal mx-1">&</span>}
+                                    {name}
+                                </Fragment>
+                            ))
+                        ) : (
+                            `${bridge.streakDays} hari libur beruntun`
+                        )
+                    }
+                </h2>
+                <p class="font-footnote text-footnote text-white/85 m-0 tabular-nums">
+                    {idDate(bridge.streakStart)} – {idDate(bridge.streakEnd)}
+                </p>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-space-md items-center">
-            <div class="md:col-span-4 space-y-1">
-                <span class="font-caption-1 text-caption-1 text-on-surface-variant font-medium tabular-nums">
-                    {idDate(bridge.streakStart)} – {idDate(bridge.streakEnd)}
+        <div class="md:col-span-8 p-space-md md:p-space-lg flex flex-col justify-between gap-space-md">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-sm">
+                <div>
+                    <span class="font-headline-2 text-headline-2 font-bold text-on-surface tabular-nums">
+                        {bridge.leaveDates.length} cuti → {bridge.streakDays} hari
+                    </span>
+                    <p class="font-footnote text-footnote text-on-surface-variant mt-0.5 mb-0 tabular-nums">
+                        Cuti: {bridge.leaveDates.map((d) => `${weekdayShort(d)} ${idDate(d, { day: 'numeric', month: 'short' })}`).join(', ')}
+                    </p>
+                </div>
+                <span class="shrink-0 px-2.5 py-1 rounded-full bg-primary-fixed text-primary font-callout text-callout font-bold tabular-nums">
+                    {bridge.efficiency.toFixed(1)}×
                 </span>
-                <h2 class="font-headline-3 text-headline-3 text-on-surface font-semibold">
-                    {eventNames || `${bridge.streakDays} Hari Libur Beruntun`}
-                </h2>
-                <p class="font-footnote text-footnote text-on-surface-variant">
-                    Cuti: {bridge.leaveDates.map((d) => `${weekdayShort(d)} ${idDate(d, { day: 'numeric', month: 'short' })}`).join(', ')}
-                </p>
             </div>
-            <div class={`md:col-span-8 bg-surface-container-low/70 rounded-xl p-space-sm flex flex-col justify-center ${featured ? '' : 'md:col-span-8'}`}>
+
+            <div class="bg-surface-container-low/70 rounded-xl p-space-sm flex flex-col justify-center">
                 <div class="flex items-center justify-between mb-2">
-                    <span class="font-callout text-callout font-semibold text-on-surface tabular-nums">
-                        Ambil cuti {bridge.leaveDates.length} hari · efisiensi {bridge.efficiency.toFixed(1)}×
+                    <span class="font-callout text-callout font-semibold text-on-surface">
+                        Rangkaian {bridge.streakDays} hari
                     </span>
                     <span class="font-caption-2 text-caption-2 text-on-surface-variant font-medium tabular-nums">
-                        {bridge.streakDays} hari beruntun
+                        {streak.length} tanggal
                     </span>
                 </div>
                 <div class={stripClass}>
@@ -115,32 +182,32 @@ const stripClass = compact
                     }
                 </div>
             </div>
-        </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
-            <div class="flex items-center gap-space-sm">
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
-                    <span class="font-caption-2 text-caption-2 text-on-surface-variant">Libur Nasional</span>
+            <div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
+                <div class="flex items-center gap-space-sm">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+                        <span class="font-caption-2 text-caption-2 text-on-surface-variant">Libur nasional</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+                        <span class="font-caption-2 text-caption-2 text-primary font-medium">Cuti ({bridge.leaveDates.length})</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                        <span class="font-caption-2 text-caption-2 text-secondary font-medium">Cuti bersama</span>
+                    </div>
                 </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
-                    <span class="font-caption-2 text-caption-2 text-primary font-medium">Cuti ({bridge.leaveDates.length})</span>
+                <div class="flex items-center gap-2">
+                    <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-callout text-callout font-medium cursor-pointer" type="button" data-share-plan data-detail={`${bridge.leaveDates.length} cuti jadi ${bridge.streakDays} hari libur`}>
+                        <span class="material-symbols-outlined text-[16px]">ios_share</span>
+                        <span>Bagikan</span>
+                    </button>
+                    <button class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-primary text-on-primary hover:bg-primary-container transition-all font-callout text-callout font-semibold shadow-sm cursor-pointer active:scale-[0.97]" type="button" data-save-plan>
+                        <span class="material-symbols-outlined text-[16px]">bookmark_add</span>
+                        <span>Simpan</span>
+                    </button>
                 </div>
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
-                    <span class="font-caption-2 text-caption-2 text-secondary font-medium">Cuti Bersama</span>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-callout text-callout font-medium cursor-pointer" type="button" data-share-plan data-detail={`${bridge.leaveDates.length} cuti jadi ${bridge.streakDays} hari libur`}>
-                    <span class="material-symbols-outlined text-[16px]">ios_share</span>
-                    <span>Bagikan</span>
-                </button>
-                <button class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-primary text-on-primary hover:bg-primary/90 transition-all font-callout text-callout font-semibold shadow-sm cursor-pointer" type="button" data-save-plan>
-                    <span class="material-symbols-outlined text-[16px]">bookmark_add</span>
-                    <span>Simpan</span>
-                </button>
             </div>
         </div>
     </div>

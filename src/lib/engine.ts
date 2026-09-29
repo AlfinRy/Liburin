@@ -115,14 +115,65 @@ export function recommend(bridges: Bridge[], quota: number): Recommendation {
 export function topBridges(days: DayInfo[], limit = 3): Bridge[] {
     const all = findBridges(days).filter((b) => b.streakDays >= 3);
 
-    const byBlock = new Map<string, Bridge>();
-    for (const b of [...all].sort(
-        (x, y) => y.efficiency - x.efficiency || x.leaveDates.length - y.leaveDates.length
-    )) {
-        byBlock.set(`${b._startIndex}-${b._endIndex}`, b);
+    const sorted = [...all].sort(
+        (a, b) =>
+            b.efficiency - a.efficiency ||
+            b.streakDays - a.streakDays ||
+            a.leaveDates.length - b.leaveDates.length ||
+            a._startIndex - b._startIndex
+    );
+
+    const overlaps = (a: Bridge, b: Bridge) =>
+        a._startIndex <= b._endIndex && b._startIndex <= a._endIndex;
+    const monthOf = (b: Bridge) => Number(b.streakStart.slice(5, 7));
+
+    const picked: Bridge[] = [];
+    const monthsTaken = new Set<number>();
+    for (const b of sorted) {
+        if (picked.length >= limit) break;
+        const m = monthOf(b);
+        if (monthsTaken.has(m) || picked.some((p) => overlaps(p, b))) continue;
+        picked.push(b);
+        monthsTaken.add(m);
     }
 
-    return [...byBlock.values()]
-        .sort((a, b) => b.efficiency - a.efficiency || b.streakDays - a.streakDays)
-        .slice(0, limit);
+    for (const b of sorted) {
+        if (picked.length >= limit) break;
+        if (picked.some((p) => overlaps(p, b))) continue;
+        picked.push(b);
+    }
+
+    return picked.sort((a, b) => b.efficiency - a.efficiency || b.streakDays - a.streakDays);
+}
+
+export function bridgeHighlights(days: DayInfo[], minEfficiency = 3): Bridge[] {
+    const hasOfficialHoliday = (b: Bridge) => {
+        for (let i = b._startIndex; i <= b._endIndex; i++) {
+            if (days[i].status === 'libur_nasional' || days[i].status === 'cuti_bersama') return true;
+        }
+        return false;
+    };
+
+    const all = findBridges(days).filter(
+        (b) => b.efficiency >= minEfficiency && hasOfficialHoliday(b)
+    );
+
+    const sorted = [...all].sort(
+        (a, b) =>
+            b.efficiency - a.efficiency ||
+            b.streakDays - a.streakDays ||
+            a.leaveDates.length - b.leaveDates.length ||
+            a._startIndex - b._startIndex
+    );
+
+    const overlaps = (a: Bridge, b: Bridge) =>
+        a._startIndex <= b._endIndex && b._startIndex <= a._endIndex;
+
+    const picked: Bridge[] = [];
+    for (const b of sorted) {
+        if (picked.some((p) => overlaps(p, b))) continue;
+        picked.push(b);
+    }
+
+    return picked.sort((a, b) => a._startIndex - b._startIndex);
 }

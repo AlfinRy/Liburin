@@ -1,3 +1,7 @@
+## Code Style
+
+Write code without comments. Code should be self-explanatory through clear naming. Do not add inline comments, block comments, or JSDoc unless explicitly requested by the user.
+
 ## Development
 
 When starting the dev server, use background mode:

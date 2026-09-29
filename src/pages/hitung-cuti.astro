@@ -1,11 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getHolidays } from '../lib/holiday';
+import { resolveYear } from '../lib/year';
 import { buildCalendar, topBridges } from '../lib/engine';
 import SimulatorSection from '../components/hitung-cuti/SimulatorSection.astro';
 import LongWeekendSection from '../components/hitung-cuti/LongWeekendSection.astro';
 
-const year = Number(Astro.url.searchParams.get('year')) || new Date().getFullYear();
+const year = resolveYear(Astro.url.searchParams.get('year'));
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
 const top = topBridges(days, 3);

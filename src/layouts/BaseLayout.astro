@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 interface Props {
     title: string;
     description?: string;
-    activePath?: string;
+    activePath?: 'beranda' | 'hitung-cuti' | 'rekomendasi' | 'kalender-tahunan';
     year?: number;
     mainClass?: string;
 }
@@ -44,7 +44,6 @@ const {
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
         <script is:inline>
-            // Terapkan tema sebelum paint pertama untuk menghindari FOUC
             (function () {
                 try {
                     var stored = localStorage.getItem('liburin-theme');
@@ -74,7 +73,6 @@ const {
         </main>
         <Footer year={year} />
         <script>
-            // ---- Toggle tema (fungsional, tersimpan di localStorage) ----
             const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
             const themeIcon = themeToggle?.querySelector('.material-symbols-outlined');
             const themeColor = document.querySelector<HTMLMetaElement>('meta[data-theme-color]');
@@ -86,12 +84,10 @@ const {
                 try {
                     localStorage.setItem('liburin-theme', theme);
                 } catch {
-                    /* storage bisa diblokir */
                 }
             };
 
             if (themeToggle) {
-                // Sinkronkan ikon dengan tema awal
                 const initial =
                     document.documentElement.dataset.theme === 'dark'
                         ? 'dark'
@@ -104,7 +100,6 @@ const {
                 });
             }
 
-            // ---- Reveal on scroll: elemen masuk berurutan, halus, GPU-friendly ----
             const revealables = document.querySelectorAll('[data-reveal]');
             if ('IntersectionObserver' in window && revealables.length) {
                 const io = new IntersectionObserver(

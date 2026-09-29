@@ -1,18 +1,26 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getHolidays } from '../lib/holiday';
+import { resolveYear } from '../lib/year';
 import { buildCalendar, findBridges, recommend } from '../lib/engine';
+import { getYearlyImage, imageQueriesForBridge } from '../lib/unsplash';
 import OverviewSection from '../components/rekomendasi/OverviewSection.astro';
 import RecommendationCard from '../components/rekomendasi/RecommendationCard.astro';
 import SyncSection from '../components/rekomendasi/SyncSection.astro';
 
-const year = Number(Astro.url.searchParams.get('year')) || new Date().getFullYear();
+const year = resolveYear(Astro.url.searchParams.get('year'));
 const quota = Math.min(20, Math.max(1, Number(Astro.url.searchParams.get('quota')) || 5));
 
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
 const bridges = findBridges(days);
 const recommendation = recommend(bridges, quota);
+const images = await Promise.all(
+    recommendation.bridges.map((b) => {
+        const queries = [...new Set(imageQueriesForBridge(b, days))];
+        return Promise.all(queries.map((q, i) => getYearlyImage(q, year, i)));
+    })
+);
 
 const total = bridges
     .filter((b) => b.streakDays >= 3)
@@ -30,7 +38,7 @@ const total = bridges
         <OverviewSection year={year} quota={quota} total={total} recommendation={recommendation} />
         <div class="max-w-7xl mx-auto w-full px-margin space-y-space-md" id="cards-stack">
             {recommendation.bridges.map((b, i) => (
-                <RecommendationCard bridge={b} days={days} quota={quota} featured={i === 0} />
+                <RecommendationCard bridge={b} days={days} quota={quota} featured={i === 0} images={images[i]} />
             ))}
         </div>
         <div class="max-w-7xl mx-auto w-full px-margin mt-space-xl space-y-space-md">

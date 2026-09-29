@@ -216,7 +216,6 @@
             var(--color-surface);
     }
 
-    /* Film-grain overlay: memberi tekstur halus di atas flat digital */
     body::before {
         content: '';
         position: fixed;
@@ -231,7 +230,6 @@
         opacity: 0.05;
     }
 
-    /* Background ambient: gradasi warna lembut + dot grid halus, di atas warna dasar */
     body::after {
         content: '';
         position: fixed;
@@ -279,7 +277,6 @@
         border-radius: 4px;
     }
 
-    /* ---- Slider custom: track bergradasi + thumb yang hidup ---- */
     input[type='range'] {
         -webkit-appearance: none;
         appearance: none;
@@ -344,7 +341,6 @@
         box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-primary) 18%, transparent);
     }
 
-    /* ---- Tooltip untuk data-tooltip ---- */
     [data-tooltip] {
         position: relative;
     }
@@ -375,7 +371,6 @@
         transform: translateX(-50%) translateY(0) scale(1);
     }
 
-    /* ---- Reveal on scroll ---- */
     [data-reveal] {
         opacity: 0;
         transform: translateY(18px);
@@ -406,7 +401,6 @@
         }
     }
 
-    /* ---- Print: bersihkan kromatik UI saat ekspor kalender ---- */
     @media print {
         header,
         footer,

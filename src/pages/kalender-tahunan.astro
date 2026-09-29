@@ -1,16 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getHolidays } from '../lib/holiday';
-import { buildCalendar, findBridges, topBridges } from '../lib/engine';
+import { resolveYear } from '../lib/year';
+import { buildCalendar, topBridges, bridgeHighlights } from '../lib/engine';
 import CalendarControls from '../components/kalender-tahunan/CalendarControls.astro';
 import MonthCard from '../components/kalender-tahunan/MonthCard.astro';
 
-const year = Number(Astro.url.searchParams.get('year')) || new Date().getFullYear();
+const year = resolveYear(Astro.url.searchParams.get('year'));
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
 
 const recommended = new Set<string>();
-for (const b of topBridges(days, 8)) {
+for (const b of bridgeHighlights(days)) {
     for (const d of b.leaveDates) recommended.add(d);
 }
 
