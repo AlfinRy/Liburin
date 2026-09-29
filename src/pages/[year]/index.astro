@@ -1,15 +1,19 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getHolidays } from '../lib/holiday';
-import { resolveYear } from '../lib/year';
-import { buildCalendar, findBridges, topBridges } from '../lib/engine';
-import HeroSection from '../components/beranda/HeroSection.astro';
-import StatsSection from '../components/beranda/StatsSection.astro';
-import RecommendationPreview from '../components/beranda/RecommendationPreview.astro';
-import CalculatorSection from '../components/beranda/CalculatorSection.astro';
-import HowItWorks from '../components/beranda/HowItWorks.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getHolidays } from '../../lib/holiday';
+import { AVAILABLE_YEARS, resolveYear } from '../../lib/year';
+import { buildCalendar, findBridges, topBridges } from '../../lib/engine';
+import HeroSection from '../../components/beranda/HeroSection.astro';
+import StatsSection from '../../components/beranda/StatsSection.astro';
+import RecommendationPreview from '../../components/beranda/RecommendationPreview.astro';
+import CalculatorSection from '../../components/beranda/CalculatorSection.astro';
+import HowItWorks from '../../components/beranda/HowItWorks.astro';
 
-const year = resolveYear(Astro.url.searchParams.get('year'));
+export function getStaticPaths() {
+    return AVAILABLE_YEARS.map((y) => ({ params: { year: String(y) } }));
+}
+
+const year = resolveYear(Astro.params.year);
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
 const top = topBridges(days, 3);
@@ -25,7 +29,7 @@ const total = findBridges(days).filter((b) => b.streakDays >= 3)
 >
     {top[0] && <HeroSection bridge={top[0]} days={days} year={year} />}
     <StatsSection holidays={holidays} days={days} />
-    <RecommendationPreview bridges={top} total={total} />
+    <RecommendationPreview bridges={top} total={total} year={year} />
     <CalculatorSection year={year} maxQuota={20} holidays={holidays} />
     <HowItWorks />
 </BaseLayout>

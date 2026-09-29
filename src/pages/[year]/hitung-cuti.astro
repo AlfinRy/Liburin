@@ -1,12 +1,16 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getHolidays } from '../lib/holiday';
-import { resolveYear } from '../lib/year';
-import { buildCalendar, topBridges } from '../lib/engine';
-import SimulatorSection from '../components/hitung-cuti/SimulatorSection.astro';
-import LongWeekendSection from '../components/hitung-cuti/LongWeekendSection.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getHolidays } from '../../lib/holiday';
+import { AVAILABLE_YEARS, resolveYear } from '../../lib/year';
+import { buildCalendar, topBridges } from '../../lib/engine';
+import SimulatorSection from '../../components/hitung-cuti/SimulatorSection.astro';
+import LongWeekendSection from '../../components/hitung-cuti/LongWeekendSection.astro';
 
-const year = resolveYear(Astro.url.searchParams.get('year'));
+export function getStaticPaths() {
+    return AVAILABLE_YEARS.map((y) => ({ params: { year: String(y) } }));
+}
+
+const year = resolveYear(Astro.params.year);
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
 const top = topBridges(days, 3);

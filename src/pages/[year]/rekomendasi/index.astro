@@ -1,0 +1,12 @@
+---
+import { AVAILABLE_YEARS, resolveYear } from '../../../lib/year';
+import RekomendasiPage from '../../../components/pages/RekomendasiPage.astro';
+
+export function getStaticPaths() {
+    return AVAILABLE_YEARS.map((y) => ({ params: { year: String(y) } }));
+}
+
+const year = resolveYear(Astro.params.year);
+---
+
+<RekomendasiPage year={year} quota={5} />

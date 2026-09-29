@@ -78,7 +78,7 @@ const label = (day: DayInfo) => {
         </p>
         <div class="flex flex-wrap items-center gap-space-sm mt-space-md" data-reveal style="--reveal-delay: 180ms">
             <a
-                href="/hitung-cuti"
+                href={`/${year}/hitung-cuti`}
                 class="group px-5 py-2.5 rounded-full bg-primary text-on-primary font-callout text-callout font-semibold hover:bg-primary-container active:scale-[0.97] transition-all no-underline shadow-tint hover:shadow-tint-lg"
             >
                 Buka Simulasi Cuti
@@ -88,7 +88,7 @@ const label = (day: DayInfo) => {
                 >
             </a>
             <a
-                href="/rekomendasi"
+                href={`/${year}/rekomendasi`}
                 class="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface font-callout text-callout font-semibold hover:bg-surface-container hover:border-on-surface-variant/50 active:scale-[0.97] transition-all no-underline"
             >
                 Lihat Semua Rekomendasi

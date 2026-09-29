@@ -23,7 +23,7 @@ const best = topBridges(buildCalendar(year, holidays), 1)[0];
         </p>
         <div class="flex flex-wrap items-center justify-center gap-space-sm" data-reveal style="--reveal-delay: 240ms">
             <a
-                href="/"
+                href={`/${year}`}
                 class="px-5 py-2.5 rounded-full bg-primary text-on-primary font-callout text-callout font-semibold hover:bg-primary-container active:scale-[0.97] transition-all no-underline shadow-tint"
             >
                 Kembali ke Beranda
@@ -31,7 +31,7 @@ const best = topBridges(buildCalendar(year, holidays), 1)[0];
             {
                 best && (
                     <a
-                        href="/rekomendasi"
+                        href={`/${year}/rekomendasi`}
                         class="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface font-callout text-callout font-semibold hover:bg-surface-container active:scale-[0.97] transition-all no-underline"
                     >
                         Rekomendasi cuti{' '}

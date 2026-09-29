@@ -5,9 +5,10 @@ import { idDate } from '../../lib/format';
 interface Props {
     bridges: Bridge[];
     total: number;
+    year: number;
 }
 
-const { bridges, total } = Astro.props;
+const { bridges, total, year } = Astro.props;
 if (!bridges.length) return;
 
 const cards = bridges.slice(0, 3);
@@ -19,7 +20,7 @@ const cards = bridges.slice(0, 3);
             <h2 class="font-headline-2 text-headline-2 font-bold text-on-surface m-0">
                 Rekomendasi cuti {new Date(`${cards[0].streakStart}T00:00:00`).getFullYear()}
             </h2>
-            <a class="font-callout text-callout font-semibold text-primary hover:opacity-80 transition-opacity no-underline" href="/rekomendasi">
+            <a class="font-callout text-callout font-semibold text-primary hover:opacity-80 transition-opacity no-underline" href={`/${year}/rekomendasi`}>
                 Semua {total} rekomendasi
             </a>
         </div>

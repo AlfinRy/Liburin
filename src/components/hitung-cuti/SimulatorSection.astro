@@ -74,7 +74,7 @@ const { year, holidays } = Astro.props;
                 </div>
 
                 <div class="w-full mt-space-lg pt-space-xs">
-                    <a class="w-full py-3.5 px-space-lg rounded-full bg-primary text-on-primary font-headline-3 text-headline-3 flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition-all duration-150 group no-underline" id="cta-rekomendasi" href={`/rekomendasi?year=${year}&quota=12`}>
+                    <a class="w-full py-3.5 px-space-lg rounded-full bg-primary text-on-primary font-headline-3 text-headline-3 flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition-all duration-150 group no-underline" id="cta-rekomendasi" href={`/${year}/rekomendasi/12`}>
                         <span>Cari Rekomendasi</span>
                         <span class="material-symbols-outlined text-[20px] transition-transform duration-200 group-hover:translate-x-1">arrow_forward</span>
                     </a>
@@ -187,7 +187,7 @@ const { year, holidays } = Astro.props;
         barCuti!.style.width = `${cutiShare}%`;
         barBonus!.style.width = `${Math.max(10, 100 - cutiShare)}%`;
 
-        if (cta) cta.href = `/rekomendasi?year=${year}&quota=${currentLeave}`;
+        if (cta) cta.href = `/${year}/rekomendasi/${currentLeave}`;
 
         const best = stats.bridges[0];
         if (best && tipsText && tipsBadge) {
