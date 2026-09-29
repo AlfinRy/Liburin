@@ -73,7 +73,7 @@ export function LeavePlanner({ holidays, year }: { holidays: Holiday[]; year: nu
                 <button
                     type="button"
                     onClick={search}
-                    className="mx-auto mt-6 block rounded-full bg-accent px-8 py-3 text-[15px] font-semibold text-white transition duration-150 ease-apple hover:opacity-90 active:scale-95"
+                    className="mx-auto mt-6 block w-full rounded-full bg-accent px-8 py-3.5 text-[15px] font-semibold text-white transition duration-150 ease-apple hover:opacity-90 active:scale-95 sm:w-auto"
                 >
                     Cari Rekomendasi
                 </button>

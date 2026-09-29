@@ -46,15 +46,13 @@ const cutiBersama = holidays.filter((h) => h.isCutiBersama);
         </header>
         <main class="mx-auto max-w-280 px-6 py-12 md:px-16 md:py-16 flex flex-col gap-16">
             {top[0] && (
-                <section class="flex flex-col items-center gap-4 py-8 text-center md:py-16">
-                    <p class="my-0 text-sm font-semibold uppercase tracking-wide text-accent">
-                        Libur terpanjang tahun {year}
-                    </p>
-                    <h1 class="display-num my-0 text-[40px] font-bold md:text-[64px]">
-                        <span class="tnum">{top[0].streakDays}</span> hari libur
+                <section class="relative flex flex-col items-center gap-5 py-4 text-center md:py-10">
+                    <div class="hero-glow" aria-hidden="true"></div>
+                    <h1 class="display-num my-0 text-[56px] font-bold md:text-[80px]">
+                        {top[0].streakDays} hari libur
                     </h1>
                     <p class="m-0 max-w-xl text-[15px] text-text-secondary md:text-base">
-                        Cukup ambil{' '}
+                        Libur terpanjang {year}: cukup ambil{' '}
                         <strong class="text-text-primary">
                             {top[0].leaveDates.length} hari cuti
                         </strong>{' '}
@@ -62,8 +60,44 @@ const cutiBersama = holidays.filter((h) => h.isCutiBersama);
                         <strong class="text-text-primary">
                             {top[0].leaveDates.map((d) => fmt(d)).join(', ')}
                         </strong>{' '}
-                        — libur {fmt(top[0].streakStart)} sampai {fmt(top[0].streakEnd, { weekday: 'long', day: 'numeric', month: 'long' })}.
+                        — libur {fmt(top[0].streakStart)} sampai{' '}
+                        {fmt(top[0].streakEnd, { weekday: 'long', day: 'numeric', month: 'long' })}.
                     </p>
+                    <a
+                        href="#planner"
+                        class="mt-2 rounded-full border border-separator px-6 py-2.5 text-sm font-medium text-accent no-underline transition duration-150 ease-apple hover:bg-bg-secondary active:scale-95"
+                    >
+                        Cari kombinasi cutimu
+                    </a>
+                    <div
+                        class="no-scrollbar -mx-6 mt-10 flex w-full snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 text-left sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0"
+                    >
+                        {top.map((b, i) => (
+                            <article
+                                class="card w-[80%] max-w-[320px] shrink-0 snap-start sm:w-auto"
+                            >
+                                <p class="tnum m-0 text-xs font-medium text-text-secondary">
+                                    #{i + 1} · {fmt(b.streakStart, { month: 'long' })}
+                                </p>
+                                <p class="display-num my-2 text-3xl font-bold">
+                                    {b.streakDays}
+                                    <span class="text-sm font-medium text-text-secondary">
+                                        hari libur
+                                    </span>
+                                </p>
+                                <p class="m-0 text-sm text-text-secondary">
+                                    Ambil cuti{' '}
+                                    <strong class="text-accent">
+                                        {b.leaveDates.map((d) => fmt(d)).join(', ')}
+                                    </strong>
+                                </p>
+                                <p class="tnum m-0 mt-1 text-xs text-text-secondary">
+                                    {b.leaveDates.length} cuti → {b.streakDays} libur ·{' '}
+                                    {b.efficiency.toFixed(1)}× efektif
+                                </p>
+                            </article>
+                        ))}
+                    </div>
                 </section>
             )}
 
@@ -74,7 +108,7 @@ const cutiBersama = holidays.filter((h) => h.isCutiBersama);
                     Daftar Hari Libur Nasional & Cuti Bersama {year}
                 </h2>
                 <div class="card overflow-x-auto p-0">
-                    <table class="w-full text-left text-[15px]">
+                    <table class="ref-table w-full text-left text-[15px]">
                         <thead>
                             <tr class="border-b border-separator text-xs uppercase tracking-wide text-text-secondary">
                                 <th class="px-6 py-4 font-medium">Tanggal</th>
@@ -85,7 +119,7 @@ const cutiBersama = holidays.filter((h) => h.isCutiBersama);
                         <tbody>
                             {holidays.map((h) => (
                                 <tr class="border-b border-separator last:border-0">
-                                    <td class="tnum px-6 py-3 whitespace-nowrap">
+                                    <td class="tnum whitespace-nowrap px-6 py-3">
                                         {fmt(h.date, { weekday: 'short', day: 'numeric', month: 'long' })}
                                     </td>
                                     <td class="px-6 py-3">{h.name}</td>
@@ -111,5 +145,23 @@ const cutiBersama = holidays.filter((h) => h.isCutiBersama);
                 </p>
             </section>
         </main>
+        <footer class="border-t border-separator">
+            <div
+                class="mx-auto flex max-w-280 flex-col items-center gap-2 px-6 py-8 text-center text-xs text-text-secondary md:px-16"
+            >
+                <p class="m-0">
+                    Liburin · Data:{' '}
+                    <a
+                        href="https://www.kemenkopmk.go.id/sites/default/files/pengumuman/2025-09/SKB%20Libur%20Nasional%20dan%20Cuti%20Bersama%20Tahun%202026.pdf"
+                        target="_blank"
+                        rel="noopener"
+                        class="text-accent"
+                    >
+                        SKB 3 Menteri {year}
+                    </a>
+                </p>
+                <p class="m-0">Cuti bersama bersifat anjuran — kebijakan tiap perusahaan dapat berbeda.</p>
+            </div>
+        </footer>
     </body>
 </html>

@@ -62,9 +62,12 @@ export function RecommendationCard({
                     Rekomendasi terbaik untukmu
                 </p>
             )}
-            <p className="tnum my-0 text-4xl font-bold">
+            <p className="tnum m-0 text-xs font-medium text-text-secondary">
+                {fmt(bridge.streakStart, { month: 'long' })}
+            </p>
+            <p className="display-num my-1 text-4xl font-bold">
                 {bridge.streakDays}
-                <span className="ml-1 text-base font-medium text-text-secondary">
+                <span className="ml-1.5 text-sm font-medium tracking-normal text-text-secondary">
                     hari libur
                 </span>
             </p>
