@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getHolidays } from '../lib/holiday';
+import { buildCalendar, topBridges } from '../lib/engine';
+import SimulatorSection from '../components/hitung-cuti/SimulatorSection.astro';
+import LongWeekendSection from '../components/hitung-cuti/LongWeekendSection.astro';
+
+const year = Number(Astro.url.searchParams.get('year')) || new Date().getFullYear();
+const holidays = await getHolidays(year);
+const days = buildCalendar(year, holidays);
+const top = topBridges(days, 3);
+---
+
+<BaseLayout
+    title={`Hitung Cuti ${year} - Liburin`}
+    activePath="hitung-cuti"
+    year={year}
+    mainClass="bg-surface"
+>
+    <div class="flex flex-col w-full">
+        <SimulatorSection year={year} holidays={holidays} />
+        <div class="max-w-4xl mx-auto w-full px-margin">
+            <LongWeekendSection bridges={top} days={days} />
+        </div>
+    </div>
+</BaseLayout>

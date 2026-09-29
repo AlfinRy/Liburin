@@ -1,0 +1,244 @@
+---
+import type { Holiday } from '../../lib/types';
+
+interface Props {
+    year: number;
+    holidays: Holiday[];
+}
+
+const { year, holidays } = Astro.props;
+---
+
+<div id="simulator-data" data-holidays={JSON.stringify(holidays)} data-year={year} hidden></div>
+
+<section class="relative w-full overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none opacity-40">
+        <div class="absolute inset-0" style="background-image: radial-gradient(rgba(0, 89, 181, 0.08) 1px, transparent 1px); background-size: 24px 24px;"></div>
+        <div class="absolute top-6 left-1/2 -translate-x-1/2 w-[780px] h-[380px] bg-gradient-to-tr from-primary-fixed/60 via-primary-container/15 to-transparent blur-3xl rounded-full pointer-events-none"></div>
+        <div class="absolute top-48 right-1/4 w-[480px] h-[320px] bg-gradient-to-br from-secondary-fixed/40 via-secondary-container/10 to-transparent blur-3xl rounded-full pointer-events-none"></div>
+        <div class="absolute -top-10 left-1/4 w-[360px] h-[260px] bg-gradient-to-br from-primary-fixed/30 to-transparent blur-2xl rounded-full pointer-events-none"></div>
+    </div>
+    <div class="relative max-w-4xl mx-auto px-margin py-space-xl">
+        <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-space-lg">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-caption-1 text-caption-1 mb-space-sm shadow-sm">
+                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                <span>Simulator Algoritma SKB 3 Menteri {year}</span>
+            </div>
+            <h1 class="font-headline-1 text-headline-1 text-on-surface tracking-tight">
+                Berapa jatah cuti tahunanmu?
+            </h1>
+            <p class="font-body-large text-body-large text-on-surface-variant mt-space-xs">
+                Liburin akan menyusun kombinasi tanggal paling efisien dari cuti bersama dan hari
+                kejepit nasional.
+            </p>
+        </div>
+
+        <div class="relative rounded-3xl p-space-lg md:p-space-xl" style="box-shadow: rgba(0, 30, 80, 0.08) 0px 10px 40px -10px, rgba(0, 0, 0, 0.05) 0px 0px 1px 1px; border: 1px solid rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); background: var(--color-surface-container-lowest);">
+            <div class="flex flex-col items-center">
+                <div class="flex items-center justify-center gap-space-lg w-full max-w-md my-space-xs">
+                    <button aria-label="Kurangi cuti" class="w-14 h-14 rounded-full bg-surface-container text-on-surface flex items-center justify-center transition-all duration-150 hover:bg-surface-container-high active:scale-90 select-none shadow-sm focus:outline-none cursor-pointer" id="btn-decrement" type="button">
+                        <span class="material-symbols-outlined text-[28px]">remove</span>
+                    </button>
+                    <div class="flex flex-col items-center justify-center min-w-[150px] select-none">
+                        <span class="font-display-hero text-display-hero text-on-surface tracking-tight tabular-nums transition-transform duration-150" id="leave-val">12</span>
+                        <span class="font-callout text-callout text-on-surface-variant -mt-1 font-semibold uppercase tracking-wider">Hari Cuti</span>
+                    </div>
+                    <button aria-label="Tambah cuti" class="w-14 h-14 rounded-full bg-surface-container text-on-surface flex items-center justify-center transition-all duration-150 hover:bg-surface-container-high active:scale-90 select-none shadow-sm focus:outline-none cursor-pointer" id="btn-increment" type="button">
+                        <span class="material-symbols-outlined text-[28px]">add</span>
+                    </button>
+                </div>
+
+                <div class="w-full max-w-sm mt-space-md flex flex-col items-center">
+                    <input class="w-full h-2 bg-surface-container rounded-full appearance-none cursor-pointer accent-primary-container focus:outline-none" id="leave-slider" max="20" min="1" step="1" type="range" value="12" />
+                    <div class="w-full flex justify-between items-center mt-2 px-1 text-on-surface-variant font-caption-2 text-caption-2">
+                        <span>1 Hari</span>
+                        <span class="font-semibold text-primary">Standar: 12 Hari</span>
+                        <span>20 Hari</span>
+                    </div>
+                </div>
+
+                <div class="w-full pt-space-lg mt-space-md">
+                    <div class="text-left mb-space-xs">
+                        <span class="font-caption-1 text-caption-1 text-on-surface-variant uppercase tracking-wider font-semibold">
+                            Prioritas & Periode Liburan
+                        </span>
+                    </div>
+                    <div class="flex flex-wrap gap-2" id="filter-chips">
+                        <button class="chip active px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-primary-container text-on-primary shadow-sm cursor-pointer" data-chip="semua" type="button">
+                            Semua Bulan
+                        </button>
+                        <button class="chip px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high cursor-pointer" data-chip="sem1" type="button">
+                            Semester 1 (Jan - Jun)
+                        </button>
+                        <button class="chip px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high cursor-pointer" data-chip="sem2" type="button">
+                            Semester 2 (Jul - Des)
+                        </button>
+                        <button class="chip px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high flex items-center gap-1.5 cursor-pointer" data-chip="wisata" type="button">
+                            <span class="material-symbols-outlined text-[16px]">beach_access</span>
+                            <span>Prioritas Wisata</span>
+                        </button>
+                        <button class="chip px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high flex items-center gap-1.5 cursor-pointer" data-chip="mudik" type="button">
+                            <span class="material-symbols-outlined text-[16px]">home_pin</span>
+                            <span>Prioritas Mudik</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="w-full mt-space-lg pt-space-xs">
+                    <a class="w-full py-3.5 px-space-lg rounded-full bg-primary-container text-on-primary font-headline-3 text-headline-3 flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(0,113,227,0.32)] hover:opacity-95 active:scale-[0.99] transition-all duration-150 group no-underline" id="cta-rekomendasi" href={`/rekomendasi?year=${year}&quota=12`}>
+                        <span>Cari Rekomendasi Terbaik</span>
+                        <span class="material-symbols-outlined text-[20px] transition-transform duration-200 group-hover:translate-x-1">arrow_forward</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-space-lg grid grid-cols-1 md:grid-cols-12 gap-space-md">
+            <div class="md:col-span-8 rounded-2xl p-space-md flex flex-col justify-between" style="box-shadow: rgba(0, 30, 80, 0.06) 0px 4px 20px -4px, rgba(0, 0, 0, 0.04) 0px 0px 1px 1px; border: 1px solid rgba(255, 255, 255, 0.9); background: var(--color-surface-container-lowest);">
+                <div class="flex items-start justify-between gap-space-sm mb-space-sm">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant flex items-center justify-center">
+                            <span class="material-symbols-outlined text-[18px]">insights</span>
+                        </div>
+                        <span class="font-headline-3 text-headline-3 text-on-surface">Potensi Libur Maksimal</span>
+                    </div>
+                    <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-caption-1 text-caption-1 font-semibold tabular-nums" id="multiplier-badge">-x Holiday Multiplier</span>
+                </div>
+                <p class="font-body-large text-body-large text-on-surface mb-space-md">
+                    Dengan <span class="font-semibold text-primary" id="summary-cuti">12 hari</span> cuti, kamu berpotensi mendapatkan hingga
+                    <span class="font-bold text-on-surface underline decoration-secondary decoration-2 underline-offset-4" id="summary-libur">- hari libur</span> sepanjang {year}.
+                </p>
+                <div class="space-y-space-xs">
+                    <div class="flex justify-between items-center font-caption-1 text-caption-1 text-on-surface-variant">
+                        <span>Efisiensi Penggabungan (Jatah Cuti + Tanggal Merah)</span>
+                        <span class="font-semibold text-on-surface" id="efficiency-percent">-% Optimal</span>
+                    </div>
+                    <div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
+                        <div class="h-full bg-primary-container transition-all duration-300" id="bar-cuti" style="width: 0%;"></div>
+                        <div class="h-full bg-secondary-fixed transition-all duration-300" id="bar-bonus" style="width: 100%;"></div>
+                    </div>
+                    <div class="flex items-center gap-space-md pt-1 font-caption-2 text-caption-2 text-on-surface-variant">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+                            <span>Cuti Pribadi</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 rounded-full bg-secondary-fixed"></span>
+                            <span>Bonus Weekend & Hari Merah</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 rounded-2xl p-space-md flex flex-col justify-between" style="box-shadow: rgba(0, 89, 181, 0.08) 0px 4px 20px -4px, rgba(0, 89, 181, 0.12) 0px 0px 1px 1px; border: 1px solid rgba(215, 226, 255, 0.6); backdrop-filter: blur(12px); background: color-mix(in srgb, var(--color-primary-fixed) 20%, transparent);">
+                <div>
+                    <div class="flex items-center gap-2 mb-space-xs text-on-primary-fixed-variant">
+                        <span class="material-symbols-outlined text-[20px]">lightbulb</span>
+                        <span class="font-headline-3 text-headline-3">Tips Perencanaan</span>
+                    </div>
+                    <p class="font-body-default text-body-default text-on-surface-variant leading-snug" id="tips-text">
+                        Ambil cuti di hari kejepit di antara libur nasional dan akhir pekan untuk melipatgandakan hari liburmu.
+                    </p>
+                </div>
+                <div class="mt-space-md pt-space-xs flex items-center justify-between">
+                    <span class="font-caption-2 text-caption-2 text-on-surface-variant uppercase tracking-wider">Bridge Hack #1</span>
+                    <span class="px-2 py-0.5 rounded-full bg-surface-container-lowest text-primary font-caption-2 text-caption-2 font-semibold" id="tips-badge">Hemat Maksimal</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { buildCalendar, findBridges, recommend } from '../../lib/engine';
+    import type { Holiday } from '../../lib/types';
+
+    const root = document.getElementById('simulator-data') as HTMLElement | null;
+    const leaveValEl = document.getElementById('leave-val');
+    const leaveSlider = document.getElementById('leave-slider') as HTMLInputElement | null;
+    const btnDecrement = document.getElementById('btn-decrement');
+    const btnIncrement = document.getElementById('btn-increment');
+    const summaryCuti = document.getElementById('summary-cuti');
+    const summaryLibur = document.getElementById('summary-libur');
+    const multiplierBadge = document.getElementById('multiplier-badge');
+    const barCuti = document.getElementById('bar-cuti');
+    const barBonus = document.getElementById('bar-bonus');
+    const efficiencyPercent = document.getElementById('efficiency-percent');
+    const cta = document.getElementById('cta-rekomendasi') as HTMLAnchorElement | null;
+    const tipsText = document.getElementById('tips-text');
+    const tipsBadge = document.getElementById('tips-badge');
+
+    if (!root || !leaveValEl || !leaveSlider || !btnDecrement || !btnIncrement || !summaryCuti || !summaryLibur || !multiplierBadge || !barCuti || !barBonus || !efficiencyPercent) {
+        throw new Error('simulator elements missing');
+    }
+
+    const holidays: Holiday[] = JSON.parse(root.dataset.holidays ?? '[]');
+    const year = Number(root.dataset.year);
+    const days = buildCalendar(year, holidays);
+    const bridges = findBridges(days);
+
+    const params = new URLSearchParams(window.location.search);
+    let currentLeave = Math.min(20, Math.max(1, parseInt(params.get('quota') ?? '12', 10) || 12));
+
+    const cache = new Map<number, ReturnType<typeof recommend>>();
+    function compute(quota: number) {
+        if (!cache.has(quota)) cache.set(quota, recommend(bridges, quota));
+        return cache.get(quota)!;
+    }
+
+    function updateUI() {
+        const stats = compute(currentLeave);
+        leaveValEl!.textContent = String(currentLeave);
+        leaveSlider!.value = String(currentLeave);
+        summaryCuti!.textContent = `${currentLeave} hari`;
+        summaryLibur!.textContent = `${stats.totalStreakDays} hari libur`;
+        multiplierBadge!.textContent = `${(stats.totalStreakDays / Math.max(stats.totalLeaveUsed, 1)).toFixed(1)}x Holiday Multiplier`;
+        efficiencyPercent!.textContent = `${Math.min(95, Math.round((stats.totalStreakDays / Math.max(currentLeave, 1)) * 12))}% Optimal`;
+
+        const cutiShare = Math.round((stats.totalLeaveUsed / (stats.totalStreakDays || 1)) * 100);
+        barCuti!.style.width = `${cutiShare}%`;
+        barBonus!.style.width = `${Math.max(10, 100 - cutiShare)}%`;
+
+        if (cta) cta.href = `/rekomendasi?year=${year}&quota=${currentLeave}`;
+
+        const best = stats.bridges[0];
+        if (best && tipsText && tipsBadge) {
+            const bonus = best.streakDays - best.leaveDates.length;
+            tipsText.textContent = `Ambil ${best.leaveDates.length} hari cuti untuk mendapatkan ${best.streakDays} hari libur berturut-turut, plus ${bonus} hari gratis dari libur nasional dan weekend.`;
+            tipsBadge.textContent = `Hemat ${Math.round((bonus / best.streakDays) * 100)}%`;
+        }
+    }
+
+    btnDecrement!.addEventListener('click', () => {
+        if (currentLeave > 1) {
+            currentLeave--;
+            updateUI();
+        }
+    });
+
+    btnIncrement!.addEventListener('click', () => {
+        if (currentLeave < 20) {
+            currentLeave++;
+            updateUI();
+        }
+    });
+
+    leaveSlider!.addEventListener('input', () => {
+        currentLeave = parseInt(leaveSlider!.value, 10);
+        updateUI();
+    });
+
+    const chips = document.querySelectorAll('#filter-chips .chip');
+    chips.forEach((chip) => {
+        chip.addEventListener('click', () => {
+            chips.forEach((c) => {
+                c.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm', 'active');
+                c.classList.add('bg-surface-container', 'text-on-surface-variant');
+            });
+            chip.classList.remove('bg-surface-container', 'text-on-surface-variant');
+            chip.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm', 'active');
+        });
+    });
+
+    updateUI();
+</script>

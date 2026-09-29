@@ -1,0 +1,88 @@
+---
+import type { Bridge, DayInfo } from '../../lib/types';
+import { idDate } from '../../lib/format';
+
+interface Props {
+    bridges: Bridge[];
+    days: DayInfo[];
+}
+
+const { bridges, days } = Astro.props;
+const byDate = new Map(days.map((d) => [d.date, d]));
+
+const nameFor = (b: Bridge) => {
+    const list: string[] = [];
+    for (
+        let d = new Date(`${b.streakStart}T00:00:00`);
+        d <= new Date(`${b.streakEnd}T00:00:00`);
+        d.setDate(d.getDate() + 1)
+    ) {
+        const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        const info = byDate.get(iso);
+        if (info?.name) list.push(info.name);
+    }
+    const unique = [...new Set(list)];
+    return unique.slice(0, 2).join(' & ') || 'Periode Libur';
+};
+
+const monthLabel = (b: Bridge) =>
+    new Intl.DateTimeFormat('id-ID', { month: 'long' }).format(new Date(`${b.streakStart}T00:00:00`));
+---
+
+<div class="mt-space-xl">
+    <div class="flex items-center justify-between mb-space-md">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[22px]">route</span>
+            <h2 class="font-headline-2 text-headline-2 text-on-surface">
+                Simulasi Long Weekend Terpanas
+            </h2>
+        </div>
+        <span class="font-footnote text-footnote text-on-surface-variant">Berdasarkan SKB Terkini</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+        {
+            bridges.map((b) => (
+                <div class="rounded-2xl p-space-md flex flex-col justify-between" style="box-shadow: rgba(0, 20, 60, 0.05) 0px 4px 16px -2px, rgba(0, 0, 0, 0.04) 0px 0px 1px 1px; border: 1px solid rgba(255, 255, 255, 0.9); background: var(--color-surface-container-lowest);">
+                    <div>
+                        <div class="flex items-center justify-between mb-space-xs">
+                            <span class="px-2 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-caption-2 text-caption-2 font-semibold">
+                                {nameFor(b)}
+                            </span>
+                            <span class="font-caption-2 text-caption-2 text-on-surface-variant">{monthLabel(b)}</span>
+                        </div>
+                        <h3 class="font-headline-3 text-headline-3 text-on-surface">Libur {b.streakDays} Hari</h3>
+                        <p class="font-footnote text-footnote text-on-surface-variant mt-1">
+                            Cukup ambil {b.leaveDates.length} hari cuti kerja di sela libur nasional dan weekend.
+                        </p>
+                    </div>
+                    <div class="mt-space-md pt-space-xs flex items-center justify-between">
+                        <div class="flex items-center gap-1 font-caption-2 text-caption-2 text-primary tabular-nums">
+                            <span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                            <span>{idDate(b.streakStart, { day: 'numeric', month: 'short' })} - {idDate(b.streakEnd, { day: 'numeric', month: 'short' })}</span>
+                        </div>
+                        <span class="font-callout text-callout font-bold text-on-surface">Cost: {b.leaveDates.length} Cuti</span>
+                    </div>
+                </div>
+            ))
+        }
+    </div>
+</div>
+
+<div class="mt-space-xl p-space-lg rounded-2xl bg-surface-container-low flex flex-col md:flex-row items-center justify-between gap-space-md">
+    <div class="flex items-center gap-space-md">
+        <div class="w-12 h-12 rounded-xl bg-surface-container-lowest flex items-center justify-center shrink-0 shadow-sm">
+            <span class="material-symbols-outlined text-primary text-[28px]">event_repeat</span>
+        </div>
+        <div>
+            <h4 class="font-headline-3 text-headline-3 text-on-surface">
+                Ingin sinkronisasi otomatis ke Google Calendar / Apple iCal?
+            </h4>
+            <p class="font-footnote text-footnote text-on-surface-variant mt-0.5">
+                Dapatkan pengingat H-14 sebelum batas pengajuan cuti HR kantor.
+            </p>
+        </div>
+    </div>
+    <a class="whitespace-nowrap px-space-md py-2 rounded-full bg-surface-container-lowest text-primary font-callout text-callout font-semibold shadow-sm hover:bg-surface-container-high transition-colors no-underline" href="/kalender-tahunan">
+        Pelajari Format Kalender
+    </a>
+</div>
