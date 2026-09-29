@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-   Liburin Design Tokens — Material 3 / HIG (light)
 @theme {
     --color-primary: #0059b5;
     --color-on-primary: #ffffff;
@@ -113,7 +112,6 @@
     --text-caption-2--letter-spacing: 0.02em;
 }
 
-   Base
 @layer base {
     html,
     body {
@@ -156,7 +154,6 @@
     }
 }
 
-   Utilities
 .material-symbols-outlined {
     font-family: "Material Symbols Outlined";
     font-weight: normal;
