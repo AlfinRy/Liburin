@@ -1,0 +1,115 @@
+---
+interface Props {
+    activePath?: 'beranda' | 'hitung-cuti' | 'rekomendasi' | 'kalender-tahunan';
+    year?: number;
+}
+
+const { activePath = 'beranda', year = new Date().getFullYear() } = Astro.props;
+
+const navItems: Array<{ path: string; label: string; href: string }> = [
+    { path: 'beranda', label: 'Beranda', href: `/?year=${year}` },
+    { path: 'hitung-cuti', label: 'Hitung Cuti', href: `/hitung-cuti?year=${year}` },
+    { path: 'rekomendasi', label: 'Rekomendasi', href: `/rekomendasi?year=${year}` },
+    { path: 'kalender-tahunan', label: 'Kalender Tahunan', href: `/kalender-tahunan?year=${year}` },
+];
+
+const prevYear = year - 1;
+---
+
+<header
+    class="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-surface-container-high shadow-[0_1px_8px_rgba(0,0,0,0.04)]"
+>
+    <div class="h-16 max-w-7xl mx-auto px-margin flex items-center justify-between gap-space-md">
+        <div class="flex items-center gap-space-sm shrink-0">
+            <a href={navItems[0].href} class="flex items-center gap-space-sm">
+                <div
+                    class="h-8 w-8 rounded-xl bg-primary text-on-primary flex items-center justify-center shadow-sm"
+                >
+                    <span class="material-symbols-outlined text-[20px]">event_available</span>
+                </div>
+                <div class="flex items-center gap-space-xs">
+                    <span
+                        class="font-headline-3 text-headline-3 text-on-surface font-bold tracking-tight"
+                    >
+                        Liburin
+                    </span>
+                    <span
+                        class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-caption-2 text-caption-2"
+                    >
+                        Kalender Cuti {year}
+                    </span>
+                </div>
+            </a>
+        </div>
+
+        <nav class="hidden lg:flex items-center p-1 bg-surface-container-low rounded-full">
+            {
+                navItems.map((item) =>
+                    item.path === activePath ? (
+                        <a
+                            aria-current="page"
+                            class="px-space-md py-1.5 rounded-full transition-colors bg-surface-container-highest text-on-surface font-semibold font-callout text-callout"
+                            href={item.href}
+                        >
+                            {item.label}
+                        </a>
+                    ) : (
+                        <a
+                            class="px-space-md py-1.5 rounded-full font-callout text-callout text-on-surface-variant hover:text-on-surface transition-colors"
+                            href={item.href}
+                        >
+                            {item.label}
+                        </a>
+                    )
+                )
+            }
+        </nav>
+
+        <div class="flex items-center gap-space-sm">
+            <div
+                class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed/30 text-on-secondary-fixed-variant font-caption-1 text-caption-1 font-semibold"
+            >
+                <span class="material-symbols-outlined text-[14px]">verified</span>
+                <span>SKB 3 Menteri</span>
+            </div>
+
+            <div class="flex items-center p-0.5 rounded-full bg-surface-container-low">
+                <a
+                    href={`?year=${prevYear}`}
+                    class:list={[
+                        'px-2.5 py-1 rounded-full font-caption-1 text-caption-1 transition-colors',
+                        prevYear === year
+                            ? 'bg-surface-container-lowest text-on-surface shadow-sm font-semibold'
+                            : 'text-on-surface-variant hover:text-on-surface font-semibold',
+                    ]}
+                >
+                    {prevYear}
+                </a>
+                <a
+                    href={`?year=${year}`}
+                    class:list={[
+                        'px-2.5 py-1 rounded-full font-caption-1 text-caption-1 transition-colors',
+                        new Date().getFullYear() === year
+                            ? 'bg-surface-container-lowest text-on-surface shadow-sm font-semibold'
+                            : 'text-on-surface-variant hover:text-on-surface font-semibold',
+                    ]}
+                >
+                    {year}
+                </a>
+            </div>
+
+            <button
+                aria-label="Beralih mode tema"
+                class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+                type="button"
+                data-theme-toggle
+            >
+                <span class="material-symbols-outlined text-[20px]">dark_mode</span>
+            </button>
+
+            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-on-primary text-[18px]">person</span>
+            </div>
+        </div>
+    </div>
+</header>
