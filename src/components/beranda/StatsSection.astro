@@ -1,0 +1,91 @@
+---
+import type { DayInfo, Holiday } from '../../lib/types';
+import { findBridges } from '../../lib/engine';
+
+interface Props {
+    holidays: Holiday[];
+    days: DayInfo[];
+}
+
+const { holidays, days } = Astro.props;
+
+const nationals = holidays.filter((h) => !h.isCutiBersama).length;
+const cutiBersama = holidays.filter((h) => h.isCutiBersama).length;
+
+let naturalStreaks = 0;
+let run = 0;
+for (const d of days) {
+    if (d.status !== 'kerja') {
+        run++;
+    } else {
+        if (run >= 3) naturalStreaks++;
+        run = 0;
+    }
+}
+if (run >= 3) naturalStreaks++;
+
+const golden = findBridges(days).filter((b) => b.streakDays >= 8 && b.leaveDates.length <= 3)
+    .map((b) => `${b._startIndex}-${b._endIndex}`)
+    .filter((v, i, a) => a.indexOf(v) === i).length;
+
+const stats = [
+    {
+        label: 'Kalender Pemerintah',
+        icon: 'event',
+        iconClass: 'bg-surface-container flex items-center justify-center text-primary',
+        value: nationals + cutiBersama,
+        unit: 'Hari',
+        title: 'Hari Libur Resmi',
+        desc: `${nationals} Hari Libur Nasional + ${cutiBersama} Hari Cuti Bersama`,
+    },
+    {
+        label: 'Alami Tanpa Cuti',
+        icon: 'weekend',
+        iconClass: 'bg-secondary-fixed/40 flex items-center justify-center text-secondary',
+        value: naturalStreaks,
+        unit: 'Periode',
+        title: 'Potensi Long Weekend',
+        desc: '3-4 hari beruntun murni dari penanggalan nasional',
+    },
+    {
+        label: 'Jembatan Cuti Emas',
+        icon: 'stars',
+        iconClass: 'bg-tertiary-fixed/50 flex items-center justify-center text-tertiary',
+        value: golden,
+        unit: 'Periode',
+        title: 'Peluang Super Golden',
+        desc: 'Libur > 8 hari penuh hanya dengan 2-3 hari cuti kerja',
+    },
+];
+---
+
+<section class="w-full pb-space-xl">
+    <div class="max-w-6xl mx-auto px-margin">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+            {
+                stats.map((s) => (
+                    <div
+                        class="p-space-md rounded-2xl flex flex-col justify-between hover:shadow-md transition-shadow"
+                        style="background: rgba(255, 255, 255, 0.88); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.9); box-shadow: rgba(0, 0, 0, 0.03) 0px 4px 18px;"
+                    >
+                        <div class="flex items-center justify-between mb-space-sm">
+                            <span class="font-caption-1 text-caption-1 font-semibold uppercase tracking-wider text-on-surface-variant">
+                                {s.label}
+                            </span>
+                            <div class={`w-8 h-8 rounded-full ${s.iconClass}`}>
+                                <span class="material-symbols-outlined text-[18px]">{s.icon}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="font-headline-1 text-headline-1 font-bold text-on-surface tabular-nums">
+                                {s.value} <span class="font-headline-3 text-headline-3 font-medium text-on-surface-variant">{s.unit}</span>
+                            </div>
+                            <p class="font-body-default text-body-default font-semibold text-on-surface mt-1">{s.title}</p>
+                            <p class="font-footnote text-footnote text-on-surface-variant mt-0.5">{s.desc}</p>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

@@ -1,16 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getHolidays } from '../lib/holiday';
+import { buildCalendar, findBridges, topBridges } from '../lib/engine';
+import HeroSection from '../components/beranda/HeroSection.astro';
+import StatsSection from '../components/beranda/StatsSection.astro';
+import RecommendationPreview from '../components/beranda/RecommendationPreview.astro';
+import CalculatorSection from '../components/beranda/CalculatorSection.astro';
+import HowItWorks from '../components/beranda/HowItWorks.astro';
 
 const year = Number(Astro.url.searchParams.get('year')) || new Date().getFullYear();
+const holidays = await getHolidays(year);
+const days = buildCalendar(year, holidays);
+const top = topBridges(days, 3);
+const total = findBridges(days).filter((b) => b.streakDays >= 3)
+    .map((b) => `${b._startIndex}-${b._endIndex}`)
+    .filter((v, i, a) => a.indexOf(v) === i).length;
 ---
 
-<BaseLayout title="Liburin - Perencana Libur & Cuti Bersama" activePath="beranda" year={year}>
-    <div class="max-w-6xl mx-auto px-margin py-space-xl">
-        <h1 class="font-headline-1 text-headline-1 text-on-surface tracking-tight">
-            Liburin {year}
-        </h1>
-        <p class="font-body-large text-body-large text-on-surface-variant mt-space-sm">
-            Halaman beranda sedang dibangun.
-        </p>
-    </div>
+<BaseLayout
+    title={`Liburin - Perencana Libur & Cuti Bersama ${year}`}
+    activePath="beranda"
+    year={year}
+>
+    {top[0] && <HeroSection bridge={top[0]} days={days} year={year} />}
+    <StatsSection holidays={holidays} days={days} />
+    <RecommendationPreview bridges={top} total={total} />
+    <CalculatorSection year={year} maxQuota={20} holidays={holidays} />
+    <HowItWorks />
 </BaseLayout>

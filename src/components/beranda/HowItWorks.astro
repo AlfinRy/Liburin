@@ -1,0 +1,59 @@
+---
+const steps = [
+    {
+        icon: 'pin',
+        step: 'Langkah 01',
+        accent: 'text-primary',
+        iconBg: 'bg-primary-fixed/60 text-primary',
+        title: 'Input Sisa Jatah Cuti',
+        desc: 'Masukkan jumlah hari cuti tahunan yang Anda miliki dari perusahaan, lengkap dengan preferensi hari kerja mingguan.',
+    },
+    {
+        icon: 'hub',
+        step: 'Langkah 02',
+        accent: 'text-secondary',
+        iconBg: 'bg-secondary-fixed/60 text-secondary',
+        title: 'Pendeteksian Hari Kejepit',
+        desc: 'Algoritma memindai celah hari kerja di antara libur nasional SKB 3 Menteri dan akhir pekan untuk membangun jembatan libur.',
+    },
+    {
+        icon: 'flight_takeoff',
+        step: 'Langkah 03',
+        accent: 'text-tertiary',
+        iconBg: 'bg-tertiary-fixed/70 text-tertiary',
+        title: 'Kombinasi Libur Maksimal',
+        desc: 'Dapatkan rencana cuti siap ekspor ke Google Calendar, Apple Calendar, atau dokumen pengajuan cuti resmi kantor.',
+    },
+];
+---
+
+<section class="w-full pb-space-xl">
+    <div class="max-w-6xl mx-auto px-margin">
+        <div class="text-center max-w-2xl mx-auto mb-space-lg">
+            <span class="font-caption-1 text-caption-1 uppercase tracking-wider text-primary font-semibold">
+                Filosofi Sistem
+            </span>
+            <h2 class="font-headline-1 text-headline-1 font-bold text-on-surface mt-1">
+                Bagaimana Liburin bekerja?
+            </h2>
+            <p class="font-body-large text-body-large text-on-surface-variant mt-2">
+                Kami menyingkirkan kerumitan mencocokkan kalender secara manual dengan pemetaan
+                algoritma jembatan cuti.
+            </p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+            {
+                steps.map((s) => (
+                    <div class="flex flex-col items-center text-center p-space-md rounded-2xl bg-surface-container-low hover:bg-surface-container transition-colors">
+                        <div class={`w-14 h-14 rounded-2xl flex items-center justify-center mb-space-md shadow-xs ${s.iconBg}`}>
+                            <span class="material-symbols-outlined text-[28px]">{s.icon}</span>
+                        </div>
+                        <span class={`font-caption-2 text-caption-2 font-bold uppercase tracking-widest mb-1 ${s.accent}`}>{s.step}</span>
+                        <h3 class="font-headline-2 text-headline-2 font-bold text-on-surface mb-2">{s.title}</h3>
+                        <p class="font-body-default text-body-default text-on-surface-variant">{s.desc}</p>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>
