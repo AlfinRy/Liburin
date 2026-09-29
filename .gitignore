@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+docs/beranda_page/
+docs/hitungcuti_page/
+docs/kalendertahunan_page/
+docs/rekomendasi_page/
