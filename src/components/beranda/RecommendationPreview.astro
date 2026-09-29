@@ -14,47 +14,33 @@ const cards = bridges.slice(0, 3);
 ---
 
 <section class="w-full pb-space-xl">
-    <div class="max-w-6xl mx-auto px-margin">
-        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-space-md gap-space-xs">
-            <div>
-                <span class="font-caption-1 text-caption-1 uppercase tracking-wider text-primary font-semibold">
-                    Peluang Libur Pilihan
-                </span>
-                <h2 class="font-headline-1 text-headline-1 font-bold text-on-surface tracking-tight mt-1">
-                    Rekomendasi Cuti Strategis
-                </h2>
-            </div>
-            <a class="inline-flex items-center gap-1 font-callout text-callout font-semibold text-primary hover:opacity-80 transition-opacity no-underline" href="/rekomendasi">
-                <span>Lihat Semua {total} Rekomendasi</span>
-                <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between mb-space-md gap-space-xs">
+            <h2 class="font-headline-2 text-headline-2 font-bold text-on-surface m-0">
+                Rekomendasi cuti {new Date(`${cards[0].streakStart}T00:00:00`).getFullYear()}
+            </h2>
+            <a class="font-callout text-callout font-semibold text-primary hover:opacity-80 transition-opacity no-underline" href="/rekomendasi">
+                Semua {total} rekomendasi
             </a>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+        <div class="divide-y divide-surface-container-high border-y border-surface-container-high">
             {
                 cards.map((b) => (
-                    <div class="group rounded-2xl overflow-hidden flex flex-col hover:-translate-y-1 transition-all duration-300" style="background: var(--color-surface-container-lowest); box-shadow: rgba(0, 0, 0, 0.04) 0px 2px 16px;">
-                        <div class="p-space-md flex-1 flex flex-col justify-between space-y-space-sm">
-                            <div>
-                                <div class="flex items-center gap-2 text-on-surface-variant font-footnote text-footnote tabular-nums">
-                                    <span class="material-symbols-outlined text-[15px]">calendar_today</span>
-                                    <span>{idDate(b.streakStart)} – {idDate(b.streakEnd)}</span>
-                                </div>
-                                <h3 class="font-headline-2 text-headline-2 font-bold text-on-surface mt-1">
-                                    {b.streakDays} Hari Libur Beruntun
-                                </h3>
-                                <p class="font-body-default text-body-default text-on-surface-variant mt-1.5">
-                                    Ambil cuti pada {b.leaveDates.map((d) => idDate(d, { day: 'numeric', month: 'short' })).join(', ')} untuk mengunci rangkaian hari bebas terpanjang di periode ini.
-                                </p>
-                            </div>
-                            <div class="pt-space-sm flex items-center justify-between">
-                                <span class="px-2.5 py-1 rounded-full bg-primary-fixed/60 text-primary font-caption-1 text-caption-1 font-semibold">
-                                    Butuh {b.leaveDates.length} Hari Cuti
-                                </span>
-                                <span class="font-caption-2 text-caption-2 text-on-surface-variant font-semibold tabular-nums">
-                                    {b.efficiency.toFixed(1)}x Efisiensi
-                                </span>
-                            </div>
+                    <div class="py-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+                        <div>
+                            <p class="font-footnote text-footnote text-on-surface-variant m-0 tabular-nums">
+                                {idDate(b.streakStart, { day: 'numeric', month: 'short' })} – {idDate(b.streakEnd, { day: 'numeric', month: 'short' })}
+                            </p>
+                            <h3 class="font-headline-3 text-headline-3 font-semibold text-on-surface mt-1 mb-0">
+                                {b.leaveDates.length} cuti → {b.streakDays} hari libur
+                            </h3>
+                            <p class="font-footnote text-footnote text-on-surface-variant mt-1 mb-0 tabular-nums">
+                                Ambil {b.leaveDates.map((d) => idDate(d, { day: 'numeric', month: 'short' })).join(', ')}
+                            </p>
                         </div>
+                        <span class="font-headline-2 text-headline-2 font-bold text-primary tabular-nums shrink-0">
+                            {b.efficiency.toFixed(1)}×
+                        </span>
                     </div>
                 ))
             }

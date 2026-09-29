@@ -50,37 +50,28 @@ const stripClass = compact
 ---
 
 <article
-    class={`recommendation-card rounded-xl p-space-md md:p-space-lg shadow-sm transition-all duration-200 hover:shadow-md relative overflow-hidden bg-surface-container-lowest ${featured ? 'p-space-lg' : ''}`}
+    class={`recommendation-card rounded-xl p-space-md md:p-space-lg border border-surface-container-high transition-colors duration-200 hover:border-outline-variant bg-surface-container-lowest ${featured ? '' : ''}`}
     data-category={`${category} efficiency`}
     data-period={`${idDate(bridge.streakStart)} - ${idDate(bridge.streakEnd)}`}
 >
-    {featured && <div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>}
     <div class="flex flex-col gap-space-md">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
             <div class="flex flex-wrap items-center gap-2">
                 {
                     featured ? (
-                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-fixed/50 text-on-primary-fixed-variant font-caption-1 text-caption-1 font-semibold">
-                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
-                            Rekomendasi Terbaik Untukmu
+                        <span class="font-caption-1 text-caption-1 font-semibold text-primary">
+                            Rekomendasi terbaik
                         </span>
                     ) : (
-                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-fixed/30 text-on-secondary-fixed-variant font-caption-1 text-caption-1 font-semibold">
-                            <span class="material-symbols-outlined text-[14px]">holiday_village</span>
-                            {eventNames || 'Periode Libur'}
+                        <span class="font-caption-1 text-caption-1 text-on-surface-variant">
+                            {eventNames || 'Periode libur'}
                         </span>
                     )
                 }
-                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-caption-2 text-caption-2 font-semibold tracking-wide uppercase tabular-nums">
-                    Pengali {bridge.efficiency.toFixed(1)}x
-                </span>
             </div>
             <div class="text-left sm:text-right">
-                <span class="font-caption-2 text-caption-2 text-on-surface-variant uppercase tracking-wider block">
-                    {featured ? 'Efisiensi Ekstrem' : 'Efisiensi Cuti'}
-                </span>
-                <span class={`font-headline-2 text-headline-2 font-bold tabular-nums ${featured ? 'text-primary' : 'text-on-surface'}`}>
-                    {bridge.leaveDates.length} Cuti → {bridge.streakDays} Hari Libur
+                <span class="font-headline-2 text-headline-2 font-bold text-on-surface tabular-nums">
+                    {bridge.leaveDates.length} cuti → {bridge.streakDays} hari
                 </span>
             </div>
         </div>
@@ -99,14 +90,11 @@ const stripClass = compact
             </div>
             <div class={`md:col-span-8 bg-surface-container-low/70 rounded-xl p-space-sm flex flex-col justify-center ${featured ? '' : 'md:col-span-8'}`}>
                 <div class="flex items-center justify-between mb-2">
-                    <div class="flex items-center gap-1.5 text-primary">
-                        <span class="material-symbols-outlined text-[16px]">touch_app</span>
-                        <span class="font-callout text-callout font-semibold">
-                            {bridge.leaveDates.length} hari cuti dipilih
-                        </span>
-                    </div>
+                    <span class="font-callout text-callout font-semibold text-on-surface tabular-nums">
+                        Ambil cuti {bridge.leaveDates.length} hari · efisiensi {bridge.efficiency.toFixed(1)}×
+                    </span>
                     <span class="font-caption-2 text-caption-2 text-on-surface-variant font-medium tabular-nums">
-                        {bridge.streakDays} Hari Berturut-turut
+                        {bridge.streakDays} hari beruntun
                     </span>
                 </div>
                 <div class={stripClass}>

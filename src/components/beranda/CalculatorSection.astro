@@ -1,10 +1,8 @@
 ---
-import type { Holiday } from '../../lib/types';
-
 interface Props {
     year: number;
     maxQuota: number;
-    holidays: Holiday[];
+    holidays: import('../../lib/types').Holiday[];
 }
 
 const { year, maxQuota, holidays } = Astro.props;
@@ -13,18 +11,14 @@ const { year, maxQuota, holidays } = Astro.props;
 <div id="calculator-data" data-holidays={JSON.stringify(holidays)} data-year={year} hidden></div>
 
 <section class="w-full pb-space-xl">
-    <div class="max-w-6xl mx-auto px-margin">
-        <div class="rounded-3xl p-space-lg md:p-space-xl" style="background: linear-gradient(145deg, rgba(240, 237, 239, 0.85) 0%, rgba(234, 231, 234, 0.9) 100%); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.8); box-shadow: rgba(0, 0, 0, 0.03) 0px 8px 30px;">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="border border-surface-container-high rounded-xl bg-surface-container-lowest p-space-lg md:p-space-xl">
             <div class="max-w-3xl">
-                <span class="font-caption-1 text-caption-1 uppercase tracking-wider text-primary font-semibold">
-                    Kalkulator Langsung
-                </span>
-                <h2 class="font-headline-1 text-headline-1 font-bold text-on-surface mt-1">
-                    Berapa sisa jatah cutimu tahun ini?
+                <h2 class="font-headline-2 text-headline-2 font-bold text-on-surface m-0">
+                    Berapa sisa jatah cutimu?
                 </h2>
-                <p class="font-body-large text-body-large text-on-surface-variant mt-2">
-                    Sesuaikan slider di bawah untuk melihat potensi total hari libur yang bisa kamu
-                    nikmati secara matematis.
+                <p class="font-body-default text-body-default text-on-surface-variant mt-1 mb-0">
+                    Geser untuk melihat potensi total hari libur dari jatah cutimu.
                 </p>
             </div>
             <div class="mt-space-lg grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
@@ -32,48 +26,38 @@ const { year, maxQuota, holidays } = Astro.props;
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <label class="font-callout text-callout font-semibold text-on-surface" for="leaveSlider">
-                                Jatah Cuti Pribadi Tersisa
+                                Sisa jatah cuti
                             </label>
-                            <span class="font-headline-2 text-headline-2 font-bold text-primary tabular-nums" id="sliderValueText">
-                                6 Hari
+                            <span class="font-headline-3 text-headline-3 font-bold text-primary tabular-nums" id="sliderValueText">
+                                6 hari
                             </span>
                         </div>
-                        <input class="w-full h-2.5 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" id="leaveSlider" max={maxQuota} min="1" type="range" value="6" />
+                        <input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" id="leaveSlider" max={maxQuota} min="1" type="range" value="6" />
                         <div class="flex justify-between text-caption-2 font-caption-2 text-on-surface-variant mt-1.5 tabular-nums">
-                            <span>1 Hari</span>
-                            <span>6 Hari</span>
-                            <span>{maxQuota} Hari</span>
+                            <span>1</span>
+                            <span>{maxQuota}</span>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-space-sm pt-space-xs">
-                        <div class="p-space-sm rounded-xl bg-surface-container-lowest shadow-xs">
-                            <span class="font-caption-2 text-caption-2 text-on-surface-variant">Skenario Optimal</span>
-                            <p class="font-headline-3 text-headline-3 font-bold text-on-surface mt-0.5" id="scenarioText">3 Periode Libur Panjang</p>
+                        <div>
+                            <p class="font-caption-2 text-caption-2 text-on-surface-variant m-0">Periode libur yang terkunci</p>
+                            <p class="font-headline-3 text-headline-3 font-bold text-on-surface mt-0.5 mb-0 tabular-nums" id="scenarioText">-</p>
                         </div>
-                        <div class="p-space-sm rounded-xl bg-surface-container-lowest shadow-xs">
-                            <span class="font-caption-2 text-caption-2 text-on-surface-variant">Sisa Kuota Cuti Cadangan</span>
-                            <p class="font-headline-3 text-headline-3 font-bold text-secondary mt-0.5" id="spareLeaveText">0 Hari</p>
+                        <div>
+                            <p class="font-caption-2 text-caption-2 text-on-surface-variant m-0">Sisa jatah tidak terpakai</p>
+                            <p class="font-headline-3 text-headline-3 font-bold text-on-surface mt-0.5 mb-0 tabular-nums" id="spareLeaveText">-</p>
                         </div>
                     </div>
                 </div>
-                <div class="lg:col-span-5 p-space-md rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col justify-between">
-                    <div class="space-y-space-xs">
-                        <span class="font-caption-1 text-caption-1 uppercase tracking-wide text-on-surface-variant font-semibold">
-                            Hasil Proyeksi Liburmu {year}
-                        </span>
-                        <div class="flex items-baseline gap-2">
-                            <span class="font-display-hero text-display-hero font-extrabold text-on-surface tracking-tight tabular-nums" id="totalHolidayProjection">-</span>
-                            <span class="font-headline-2 text-headline-2 font-medium text-on-surface-variant">Total Hari Bebas</span>
-                        </div>
-                        <p class="font-footnote text-footnote text-on-surface-variant leading-relaxed" id="projectionDetail">
-                            Termasuk libur nasional, cuti bersama, weekend, serta jembatan cuti optimal.
-                        </p>
-                    </div>
-                    <div class="pt-space-md">
-                        <a class="block w-full py-3 px-4 rounded-full bg-primary text-on-primary font-callout text-callout font-semibold text-center hover:opacity-90 active:scale-[0.99] transition-all no-underline" href="/rekomendasi">
-                            Lihat Rencana Rekomendasi
-                        </a>
-                    </div>
+                <div class="lg:col-span-5 lg:border-l lg:border-surface-container-high lg:pl-space-lg">
+                    <p class="font-caption-1 text-caption-1 text-on-surface-variant font-semibold uppercase tracking-wider mt-0">
+                        Proyeksi {year}
+                    </p>
+                    <p class="flex items-baseline gap-2 m-0">
+                        <span class="font-display-hero text-display-hero font-bold text-on-surface tabular-nums" id="totalHolidayProjection">-</span>
+                        <span class="font-body-large text-body-large text-on-surface-variant">hari bebas</span>
+                    </p>
+                    <p class="font-footnote text-footnote text-on-surface-variant leading-relaxed mb-0" id="projectionDetail"></p>
                 </div>
             </div>
         </div>
@@ -111,12 +95,12 @@ const { year, maxQuota, holidays } = Astro.props;
 
     slider.addEventListener('input', () => {
         const val = parseInt(slider.value, 10);
-        sliderText!.textContent = `${val} Hari`;
+        sliderText!.textContent = `${val} hari`;
         const rec = compute(val);
         projection!.textContent = String(rec.totalStreakDays);
-        scenarioText!.textContent = `${rec.bridges.length} Periode Libur Panjang`;
-        spareText!.textContent = `${val - rec.totalLeaveUsed} Hari`;
-        detailText!.textContent = `Gunakan ${rec.totalLeaveUsed} hari cuti untuk mengunci ${rec.totalStreakDays} hari bebas kerja.`;
+        scenarioText!.textContent = `${rec.bridges.length} periode`;
+        spareText!.textContent = `${val - rec.totalLeaveUsed} hari`;
+        detailText!.textContent = `Pakai ${rec.totalLeaveUsed} hari cuti untuk ${rec.totalStreakDays} hari bebas kerja beruntun.`;
     });
 
     slider.dispatchEvent(new Event('input'));

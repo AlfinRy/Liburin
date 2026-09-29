@@ -115,31 +115,14 @@
 @layer base {
     html,
     body {
-        margin: 0;
-        padding: 0;
-    }
-
-    html {
-        font-family: var(--font-body-default);
-        -webkit-font-smoothing: antialiased;
-    }
-
-    body {
         overscroll-behavior: none;
-        background: radial-gradient(
-                circle at 50% -10%,
-                rgba(215, 226, 255, 0.45) 0%,
-                rgba(242, 244, 248, 0.7) 35%,
-                rgba(251, 251, 253, 0.95) 75%
-            )
-            fixed,
-            radial-gradient(
-                circle at 90% 20%,
-                rgba(255, 220, 191, 0.22) 0%,
-                transparent 45%
-            ),
-            linear-gradient(rgb(251, 251, 253) 0%, rgb(242, 244, 248) 100%);
+        background: var(--color-surface);
+        color: var(--color-on-surface);
         min-height: 100vh;
+    }
+
+    ::selection {
+        background: color-mix(in srgb, var(--color-primary) 16%, transparent);
     }
 
     main > :first-child {
@@ -149,9 +132,20 @@
         margin-bottom: 0 !important;
     }
 
-    ::-webkit-scrollbar {
+    
+::-webkit-scrollbar {
         display: none;
     }
+
+    input[type='range'] {
+        accent-color: var(--color-primary);
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
 }
 
 .material-symbols-outlined {

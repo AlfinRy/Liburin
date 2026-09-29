@@ -11,29 +11,19 @@ const { year, holidays } = Astro.props;
 
 <div id="simulator-data" data-holidays={JSON.stringify(holidays)} data-year={year} hidden></div>
 
-<section class="relative w-full overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none opacity-40">
-        <div class="absolute inset-0" style="background-image: radial-gradient(rgba(0, 89, 181, 0.08) 1px, transparent 1px); background-size: 24px 24px;"></div>
-        <div class="absolute top-6 left-1/2 -translate-x-1/2 w-[780px] h-[380px] bg-gradient-to-tr from-primary-fixed/60 via-primary-container/15 to-transparent blur-3xl rounded-full pointer-events-none"></div>
-        <div class="absolute top-48 right-1/4 w-[480px] h-[320px] bg-gradient-to-br from-secondary-fixed/40 via-secondary-container/10 to-transparent blur-3xl rounded-full pointer-events-none"></div>
-        <div class="absolute -top-10 left-1/4 w-[360px] h-[260px] bg-gradient-to-br from-primary-fixed/30 to-transparent blur-2xl rounded-full pointer-events-none"></div>
-    </div>
-    <div class="relative max-w-4xl mx-auto px-margin py-space-xl">
+<section class="relative w-full">
+    <div class="relative max-w-4xl mx-auto px-6 py-space-xl">
         <div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-space-lg">
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-caption-1 text-caption-1 mb-space-sm shadow-sm">
-                <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-                <span>Simulator Algoritma SKB 3 Menteri {year}</span>
-            </div>
-            <h1 class="font-headline-1 text-headline-1 text-on-surface tracking-tight">
+            <h1 class="font-headline-1 text-headline-1-mobile md:text-headline-1 text-on-surface tracking-tight m-0">
                 Berapa jatah cuti tahunanmu?
             </h1>
-            <p class="font-body-large text-body-large text-on-surface-variant mt-space-xs">
-                Liburin akan menyusun kombinasi tanggal paling efisien dari cuti bersama dan hari
-                kejepit nasional.
+            <p class="font-body-large text-body-large text-on-surface-variant mt-space-xs mb-0">
+                Liburin menyusun kombinasi tanggal paling efisien dari cuti bersama dan hari
+                kejepit nasional {year}.
             </p>
         </div>
 
-        <div class="relative rounded-3xl p-space-lg md:p-space-xl" style="box-shadow: rgba(0, 30, 80, 0.08) 0px 10px 40px -10px, rgba(0, 0, 0, 0.05) 0px 0px 1px 1px; border: 1px solid rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); background: var(--color-surface-container-lowest);">
+        <div class="relative rounded-2xl p-space-lg md:p-space-xl border border-surface-container-high bg-surface-container-lowest">
             <div class="flex flex-col items-center">
                 <div class="flex items-center justify-center gap-space-lg w-full max-w-md my-space-xs">
                     <button aria-label="Kurangi cuti" class="w-14 h-14 rounded-full bg-surface-container text-on-surface flex items-center justify-center transition-all duration-150 hover:bg-surface-container-high active:scale-90 select-none shadow-sm focus:outline-none cursor-pointer" id="btn-decrement" type="button">
@@ -85,7 +75,7 @@ const { year, holidays } = Astro.props;
                 </div>
 
                 <div class="w-full mt-space-lg pt-space-xs">
-                    <a class="w-full py-3.5 px-space-lg rounded-full bg-primary-container text-on-primary font-headline-3 text-headline-3 flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(0,113,227,0.32)] hover:opacity-95 active:scale-[0.99] transition-all duration-150 group no-underline" id="cta-rekomendasi" href={`/rekomendasi?year=${year}&quota=12`}>
+                    <a class="w-full py-3.5 px-space-lg rounded-full bg-primary text-on-primary font-headline-3 text-headline-3 flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition-all duration-150 group no-underline" id="cta-rekomendasi" href={`/rekomendasi?year=${year}&quota=12`}>
                         <span>Cari Rekomendasi Terbaik</span>
                         <span class="material-symbols-outlined text-[20px] transition-transform duration-200 group-hover:translate-x-1">arrow_forward</span>
                     </a>
@@ -94,15 +84,10 @@ const { year, holidays } = Astro.props;
         </div>
 
         <div class="mt-space-lg grid grid-cols-1 md:grid-cols-12 gap-space-md">
-            <div class="md:col-span-8 rounded-2xl p-space-md flex flex-col justify-between" style="box-shadow: rgba(0, 30, 80, 0.06) 0px 4px 20px -4px, rgba(0, 0, 0, 0.04) 0px 0px 1px 1px; border: 1px solid rgba(255, 255, 255, 0.9); background: var(--color-surface-container-lowest);">
+            <div class="md:col-span-8 rounded-2xl p-space-md border border-surface-container-high bg-surface-container-lowest flex flex-col justify-between">
                 <div class="flex items-start justify-between gap-space-sm mb-space-sm">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant flex items-center justify-center">
-                            <span class="material-symbols-outlined text-[18px]">insights</span>
-                        </div>
-                        <span class="font-headline-3 text-headline-3 text-on-surface">Potensi Libur Maksimal</span>
-                    </div>
-                    <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-caption-1 text-caption-1 font-semibold tabular-nums" id="multiplier-badge">-x Holiday Multiplier</span>
+                    <h2 class="font-headline-3 text-headline-3 text-on-surface m-0">Potensi libur maksimal</h2>
+                    <span class="font-callout text-callout font-bold text-on-surface tabular-nums shrink-0" id="multiplier-badge">-×</span>
                 </div>
                 <p class="font-body-large text-body-large text-on-surface mb-space-md">
                     Dengan <span class="font-semibold text-primary" id="summary-cuti">12 hari</span> cuti, kamu berpotensi mendapatkan hingga
@@ -130,19 +115,15 @@ const { year, holidays } = Astro.props;
                 </div>
             </div>
 
-            <div class="md:col-span-4 rounded-2xl p-space-md flex flex-col justify-between" style="box-shadow: rgba(0, 89, 181, 0.08) 0px 4px 20px -4px, rgba(0, 89, 181, 0.12) 0px 0px 1px 1px; border: 1px solid rgba(215, 226, 255, 0.6); backdrop-filter: blur(12px); background: color-mix(in srgb, var(--color-primary-fixed) 20%, transparent);">
+            <div class="md:col-span-4 rounded-2xl p-space-md border border-outline-variant bg-surface-container-low flex flex-col justify-between">
                 <div>
-                    <div class="flex items-center gap-2 mb-space-xs text-on-primary-fixed-variant">
-                        <span class="material-symbols-outlined text-[20px]">lightbulb</span>
-                        <span class="font-headline-3 text-headline-3">Tips Perencanaan</span>
-                    </div>
-                    <p class="font-body-default text-body-default text-on-surface-variant leading-snug" id="tips-text">
+                    <h3 class="font-headline-3 text-headline-3 text-on-surface m-0 mb-space-xs">Tips perencanaan</h3>
+                    <p class="font-body-default text-body-default text-on-surface-variant leading-snug m-0" id="tips-text">
                         Ambil cuti di hari kejepit di antara libur nasional dan akhir pekan untuk melipatgandakan hari liburmu.
                     </p>
                 </div>
-                <div class="mt-space-md pt-space-xs flex items-center justify-between">
-                    <span class="font-caption-2 text-caption-2 text-on-surface-variant uppercase tracking-wider">Bridge Hack #1</span>
-                    <span class="px-2 py-0.5 rounded-full bg-surface-container-lowest text-primary font-caption-2 text-caption-2 font-semibold" id="tips-badge">Hemat Maksimal</span>
+                <div class="mt-space-md pt-space-xs flex items-center justify-end">
+                    <span class="font-caption-1 text-caption-1 font-semibold text-primary tabular-nums" id="tips-badge">Hemat maksimal</span>
                 </div>
             </div>
         </div>
@@ -192,7 +173,7 @@ const { year, holidays } = Astro.props;
         leaveSlider!.value = String(currentLeave);
         summaryCuti!.textContent = `${currentLeave} hari`;
         summaryLibur!.textContent = `${stats.totalStreakDays} hari libur`;
-        multiplierBadge!.textContent = `${(stats.totalStreakDays / Math.max(stats.totalLeaveUsed, 1)).toFixed(1)}x Holiday Multiplier`;
+        multiplierBadge!.textContent = `${(stats.totalStreakDays / Math.max(stats.totalLeaveUsed, 1)).toFixed(1)}×`;
         efficiencyPercent!.textContent = `${Math.min(95, Math.round((stats.totalStreakDays / Math.max(currentLeave, 1)) * 12))}% Optimal`;
 
         const cutiShare = Math.round((stats.totalLeaveUsed / (stats.totalStreakDays || 1)) * 100);

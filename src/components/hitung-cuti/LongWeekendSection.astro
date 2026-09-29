@@ -31,28 +31,19 @@ const monthLabel = (b: Bridge) =>
 
 <div class="mt-space-xl">
     <div class="flex items-center justify-between mb-space-md">
-        <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-[22px]">route</span>
-            <h2 class="font-headline-2 text-headline-2 text-on-surface">
-                Simulasi Long Weekend Terpanas
-            </h2>
-        </div>
-        <span class="font-footnote text-footnote text-on-surface-variant">Berdasarkan SKB Terkini</span>
+        <h2 class="font-headline-2 text-headline-2 text-on-surface m-0">Long weekend terbaik</h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
         {
             bridges.map((b) => (
-                <div class="rounded-2xl p-space-md flex flex-col justify-between" style="box-shadow: rgba(0, 20, 60, 0.05) 0px 4px 16px -2px, rgba(0, 0, 0, 0.04) 0px 0px 1px 1px; border: 1px solid rgba(255, 255, 255, 0.9); background: var(--color-surface-container-lowest);">
+                <div class="rounded-xl p-space-md border border-surface-container-high bg-surface-container-lowest flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-space-xs">
-                            <span class="px-2 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-caption-2 text-caption-2 font-semibold">
-                                {nameFor(b)}
-                            </span>
-                            <span class="font-caption-2 text-caption-2 text-on-surface-variant">{monthLabel(b)}</span>
+                            <span class="font-caption-1 text-caption-1 text-on-surface-variant tabular-nums">{monthLabel(b)}</span>
                         </div>
-                        <h3 class="font-headline-3 text-headline-3 text-on-surface">Libur {b.streakDays} Hari</h3>
-                        <p class="font-footnote text-footnote text-on-surface-variant mt-1">
-                            Cukup ambil {b.leaveDates.length} hari cuti kerja di sela libur nasional dan weekend.
+                        <h3 class="font-headline-3 text-headline-3 text-on-surface m-0">{b.streakDays} hari libur</h3>
+                        <p class="font-footnote text-footnote text-on-surface-variant mt-1 mb-0">
+                            {nameFor(b)} · cukup {b.leaveDates.length} hari cuti kerja.
                         </p>
                     </div>
                     <div class="mt-space-md pt-space-xs flex items-center justify-between">
@@ -60,7 +51,7 @@ const monthLabel = (b: Bridge) =>
                             <span class="material-symbols-outlined text-[16px]">calendar_today</span>
                             <span>{idDate(b.streakStart, { day: 'numeric', month: 'short' })} - {idDate(b.streakEnd, { day: 'numeric', month: 'short' })}</span>
                         </div>
-                        <span class="font-callout text-callout font-bold text-on-surface">Cost: {b.leaveDates.length} Cuti</span>
+                        <span class="font-callout text-callout font-bold text-on-surface">{b.leaveDates.length} cuti</span>
                     </div>
                 </div>
             ))
