@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getHolidays } from '../lib/holiday';
+import { buildCalendar, findBridges, recommend } from '../lib/engine';
+import OverviewSection from '../components/rekomendasi/OverviewSection.astro';
+import RecommendationCard from '../components/rekomendasi/RecommendationCard.astro';
+import SyncSection from '../components/rekomendasi/SyncSection.astro';
+
+const year = Number(Astro.url.searchParams.get('year')) || new Date().getFullYear();
+const quota = Math.min(20, Math.max(1, Number(Astro.url.searchParams.get('quota')) || 5));
+
+const holidays = await getHolidays(year);
+const days = buildCalendar(year, holidays);
+const bridges = findBridges(days);
+const recommendation = recommend(bridges, quota);
+
+const total = bridges
+    .filter((b) => b.streakDays >= 3)
+    .map((b) => `${b._startIndex}-${b._endIndex}`)
+    .filter((v, i, a) => a.indexOf(v) === i).length;
+---
+
+<BaseLayout
+    title={`Rekomendasi Cuti ${year} - Liburin`}
+    activePath="rekomendasi"
+    year={year}
+    mainClass="bg-surface"
+>
+    <div class="flex flex-col w-full">
+        <OverviewSection year={year} quota={quota} total={total} recommendation={recommendation} />
+        <div class="max-w-7xl mx-auto w-full px-margin space-y-space-md" id="cards-stack">
+            {recommendation.bridges.map((b, i) => (
+                <RecommendationCard bridge={b} days={days} quota={quota} featured={i === 0} />
+            ))}
+        </div>
+        <div class="max-w-7xl mx-auto w-full px-margin mt-space-xl space-y-space-md">
+            <SyncSection year={year} />
+        </div>
+    </div>
+</BaseLayout>
+
+<script>
+    const filterPills = document.querySelectorAll('.filter-pill');
+    const cards = document.querySelectorAll('.recommendation-card');
+
+    filterPills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+            filterPills.forEach((p) => {
+                p.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm', 'font-semibold');
+                p.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+            });
+            pill.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+            pill.classList.add('bg-primary', 'text-on-primary', 'shadow-sm', 'font-semibold');
+
+            const filterVal = pill.getAttribute('data-filter');
+            cards.forEach((card) => {
+                const cat = card.getAttribute('data-category') ?? '';
+                const el = card as HTMLElement;
+                el.style.display = filterVal === 'all' || cat.includes(filterVal!) ? '' : 'none';
+            });
+        });
+    });
+
+    function showToast(msg: string) {
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toast-message');
+        if (!toast || !toastMsg) return;
+        toastMsg.textContent = msg;
+        toast.classList.remove('opacity-0', 'pointer-events-none');
+        toast.classList.add('opacity-100');
+        setTimeout(() => {
+            toast.classList.remove('opacity-100');
+            toast.classList.add('opacity-0', 'pointer-events-none');
+        }, 2800);
+    }
+
+    document.querySelectorAll('[data-save-plan]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const card = btn.closest('.recommendation-card') as HTMLElement | null;
+            const period = card?.dataset.period ?? 'rencana';
+            showToast(`Rencana "${period}" berhasil ditambahkan ke draft cuti.`);
+        });
+    });
+
+    document.querySelectorAll('[data-share-plan]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const detail = (btn as HTMLElement).dataset.detail ?? '';
+            const title = 'Rekomendasi Cuti Liburin';
+            if (navigator.share) {
+                navigator
+                    .share({
+                        title: `Rekomendasi Cuti Liburin: ${title}`,
+                        text: `Cek trik cuti hemat: ${detail} di Liburin!`,
+                        url: window.location.href,
+                    })
+                    .catch(() => {});
+            } else {
+                navigator.clipboard.writeText(`${title} - ${detail}. Rencanakan di Liburin!`);
+                showToast('Tautan ringkasan disalin ke clipboard!');
+            }
+        });
+    });
+
+    document.querySelectorAll('[data-export]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const type = (btn as HTMLElement).dataset.export;
+            showToast(
+                type === 'gcal'
+                    ? 'Menyiapkan koneksi Google Calendar...'
+                    : 'Berkas Liburin berhasil disiapkan!'
+            );
+        });
+    });
+</script>

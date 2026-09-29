@@ -1,0 +1,87 @@
+---
+import type { Recommendation } from '../../lib/types';
+
+interface Props {
+    year: number;
+    quota: number;
+    total: number;
+    recommendation: Recommendation;
+}
+
+const { year, quota, total, recommendation } = Astro.props;
+const gained = recommendation.totalStreakDays;
+const bonus = gained - recommendation.totalLeaveUsed;
+const takenShare = Math.min(96, Math.round((recommendation.totalLeaveUsed / Math.max(gained, 1)) * 100));
+---
+
+<div class="max-w-7xl mx-auto w-full px-margin py-space-lg space-y-space-xl">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-stretch">
+        <div class="lg:col-span-8 flex flex-col justify-between space-y-space-md">
+            <div class="space-y-space-xs">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed/40 text-primary">
+                    <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                    <span class="font-caption-2 text-caption-2 uppercase tracking-wider font-semibold">
+                        Algoritma Penjepit Libur (Kejepit)
+                    </span>
+                </div>
+                <h1 class="font-headline-1 text-headline-1 text-on-surface tracking-tight">
+                    Rekomendasi Cuti Terpilih {year}
+                </h1>
+                <p class="font-body-large text-body-large text-on-surface-variant max-w-2xl">
+                    Berdasarkan simulasi alokasi {quota} hari cuti tahunan Anda. Diurutkan secara
+                    sistematis berdasarkan rasio efisiensi pelipatgandaan hari non-kerja.
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2 pt-space-xs" id="filter-container">
+                <button class="filter-pill active-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-semibold transition-all bg-primary text-on-primary shadow-sm flex items-center gap-1.5 cursor-pointer" data-filter="all" type="button">
+                    <span>Semua Rekomendasi</span>
+                    <span class="px-1.5 py-0.2 rounded-full bg-surface-container-lowest/20 font-caption-2 text-caption-2">{total}</span>
+                </button>
+                <button class="filter-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all flex items-center gap-1.5 cursor-pointer" data-filter="efficiency" type="button">
+                    <span class="material-symbols-outlined text-[14px]">trending_up</span>
+                    <span>Efisiensi Tertinggi</span>
+                </button>
+                <button class="filter-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all flex items-center gap-1.5 cursor-pointer" data-filter="weekend" type="button">
+                    <span>Long Weekend (3–4 Hari)</span>
+                </button>
+                <button class="filter-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all flex items-center gap-1.5 cursor-pointer" data-filter="super" type="button">
+                    <span class="material-symbols-outlined text-[14px]">flight_takeoff</span>
+                    <span>Super Holiday (&gt; 7 Hari)</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="lg:col-span-4 bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between shadow-sm relative overflow-hidden">
+            <div class="flex items-center justify-between">
+                <div class="space-y-0.5">
+                    <span class="font-caption-2 text-caption-2 uppercase text-on-surface-variant font-semibold tracking-wide">
+                        Plafon Cuti Kamu
+                    </span>
+                    <div class="flex items-baseline gap-1.5">
+                        <span class="font-headline-1 text-headline-1 text-on-surface font-bold tabular-nums">{quota}</span>
+                        <span class="font-callout text-callout text-on-surface-variant">/ 20 Hari Maks</span>
+                    </div>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined text-[24px]">event_repeat</span>
+                </div>
+            </div>
+            <div class="my-space-sm space-y-1.5">
+                <div class="flex justify-between font-caption-2 text-caption-2 text-on-surface-variant">
+                    <span>Total Potensi Libur Diperoleh</span>
+                    <span class="font-semibold text-secondary tabular-nums">
+                        {gained} Hari (+{Math.round((gained / Math.max(recommendation.totalLeaveUsed, 1) - 1) * 100)}%)
+                    </span>
+                </div>
+                <div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden flex">
+                    <div class="h-full bg-primary rounded-full transition-all duration-500" style={`width: ${takenShare}%;`}></div>
+                    <div class="h-full bg-secondary-fixed-dim rounded-full" style={`width: ${100 - takenShare}%;`}></div>
+                </div>
+            </div>
+            <div class="pt-space-xs flex items-center justify-between font-footnote text-footnote text-on-surface-variant">
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> {recommendation.totalLeaveUsed} Hari Diambil</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span> {bonus} Hari Bridge & Weekend</span>
+            </div>
+        </div>
+    </div>
+</div>

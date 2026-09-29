@@ -1,0 +1,158 @@
+---
+import type { Bridge, DayInfo } from '../../lib/types';
+import { idDate } from '../../lib/format';
+
+interface Props {
+    bridge: Bridge;
+    days: DayInfo[];
+    quota: number;
+    featured?: boolean;
+}
+
+const { bridge, days, quota, featured = false } = Astro.props;
+const leaveSet = new Set(bridge.leaveDates);
+const byDate = new Map(days.map((d) => [d.date, d]));
+
+const streak: DayInfo[] = [];
+for (
+    let d = new Date(`${bridge.streakStart}T00:00:00`);
+    d <= new Date(`${bridge.streakEnd}T00:00:00`);
+    d.setDate(d.getDate() + 1)
+) {
+    const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const info = byDate.get(iso);
+    if (info) streak.push(info);
+}
+
+const weekdayShort = (date: string) =>
+    new Intl.DateTimeFormat('id-ID', { weekday: 'short' }).format(new Date(`${date}T00:00:00`));
+const dayNum = (date: string) =>
+    new Intl.DateTimeFormat('id-ID', { day: 'numeric' }).format(new Date(`${date}T00:00:00`));
+
+const cell = (day: DayInfo) => {
+    if (leaveSet.has(day.date))
+        return { cls: 'bg-primary-fixed/40 text-primary', dot: 'bg-primary text-on-primary', label: 'Cuti', short: 'Cuti' };
+    if (day.status === 'libur_nasional')
+        return { cls: 'bg-tertiary-container/15 text-tertiary', dot: 'bg-tertiary text-on-tertiary', label: 'Nasional', short: 'Nas' };
+    if (day.status === 'cuti_bersama')
+        return { cls: 'bg-secondary-fixed/40 text-secondary', dot: 'bg-secondary text-on-secondary', label: 'Cuti Bersama', short: 'CB' };
+    if (day.status === 'weekend')
+        return { cls: 'bg-surface-container-high text-on-surface-variant', dot: 'bg-surface-container-highest text-on-surface', label: 'Weekend', short: 'W-end' };
+    return { cls: 'bg-surface-container-high text-on-surface-variant opacity-80', dot: 'bg-surface-container-highest text-on-surface', label: 'Kantor', short: 'Kantor' };
+};
+
+const category = bridge.streakDays > 7 ? 'super' : 'weekend';
+const eventNames = [...new Set(streak.filter((d) => d.name).map((d) => d.name!))].slice(0, 2).join(' & ');
+const compact = streak.length > 10;
+const stripClass = compact
+    ? 'grid grid-cols-8 sm:grid-cols-12 gap-1 w-full'
+    : 'grid grid-cols-5 sm:grid-cols-9 gap-1.5 w-full';
+---
+
+<article
+    class={`recommendation-card rounded-xl p-space-md md:p-space-lg shadow-sm transition-all duration-200 hover:shadow-md relative overflow-hidden bg-surface-container-lowest ${featured ? 'p-space-lg' : ''}`}
+    data-category={`${category} efficiency`}
+    data-period={`${idDate(bridge.streakStart)} - ${idDate(bridge.streakEnd)}`}
+>
+    {featured && <div class="absolute top-0 left-0 right-0 h-1 bg-primary"></div>}
+    <div class="flex flex-col gap-space-md">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+            <div class="flex flex-wrap items-center gap-2">
+                {
+                    featured ? (
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary-fixed/50 text-on-primary-fixed-variant font-caption-1 text-caption-1 font-semibold">
+                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                            Rekomendasi Terbaik Untukmu
+                        </span>
+                    ) : (
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-secondary-fixed/30 text-on-secondary-fixed-variant font-caption-1 text-caption-1 font-semibold">
+                            <span class="material-symbols-outlined text-[14px]">holiday_village</span>
+                            {eventNames || 'Periode Libur'}
+                        </span>
+                    )
+                }
+                <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-caption-2 text-caption-2 font-semibold tracking-wide uppercase tabular-nums">
+                    Pengali {bridge.efficiency.toFixed(1)}x
+                </span>
+            </div>
+            <div class="text-left sm:text-right">
+                <span class="font-caption-2 text-caption-2 text-on-surface-variant uppercase tracking-wider block">
+                    {featured ? 'Efisiensi Ekstrem' : 'Efisiensi Cuti'}
+                </span>
+                <span class={`font-headline-2 text-headline-2 font-bold tabular-nums ${featured ? 'text-primary' : 'text-on-surface'}`}>
+                    {bridge.leaveDates.length} Cuti → {bridge.streakDays} Hari Libur
+                </span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-space-md items-center">
+            <div class="md:col-span-4 space-y-1">
+                <span class="font-caption-1 text-caption-1 text-on-surface-variant font-medium tabular-nums">
+                    {idDate(bridge.streakStart)} – {idDate(bridge.streakEnd)}
+                </span>
+                <h2 class="font-headline-3 text-headline-3 text-on-surface font-semibold">
+                    {eventNames || `${bridge.streakDays} Hari Libur Beruntun`}
+                </h2>
+                <p class="font-footnote text-footnote text-on-surface-variant">
+                    Ambil cuti: {bridge.leaveDates.map((d) => `${weekdayShort(d)} ${idDate(d, { day: 'numeric', month: 'short' })}`).join(', ')}
+                </p>
+            </div>
+            <div class={`md:col-span-8 bg-surface-container-low/70 rounded-xl p-space-sm flex flex-col justify-center ${featured ? '' : 'md:col-span-8'}`}>
+                <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center gap-1.5 text-primary">
+                        <span class="material-symbols-outlined text-[16px]">touch_app</span>
+                        <span class="font-callout text-callout font-semibold">
+                            {bridge.leaveDates.length} hari cuti dipilih
+                        </span>
+                    </div>
+                    <span class="font-caption-2 text-caption-2 text-on-surface-variant font-medium tabular-nums">
+                        {bridge.streakDays} Hari Berturut-turut
+                    </span>
+                </div>
+                <div class={stripClass}>
+                    {
+                        streak.map((day) => {
+                            const c = cell(day);
+                            return (
+                                <div class={`flex flex-col items-center gap-1 p-1.5 rounded-lg text-center ${c.cls}`}>
+                                    <span class="font-caption-2 text-caption-2 font-medium">{weekdayShort(day.date)}</span>
+                                    <span class={`w-6 h-6 rounded-full flex items-center justify-center font-caption-2 text-caption-2 font-bold tabular-nums ${c.dot}`}>
+                                        {dayNum(day.date)}
+                                    </span>
+                                    <span class={`font-caption-2 ${compact ? 'text-[9px]' : 'text-[10px]'} leading-none truncate max-w-full`}>{c.short}</span>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-space-sm pt-space-xs">
+            <div class="flex items-center gap-space-sm">
+                <div class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+                    <span class="font-caption-2 text-caption-2 text-on-surface-variant">Libur Nasional</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+                    <span class="font-caption-2 text-caption-2 text-primary font-medium">Cuti Diambil ({bridge.leaveDates.length})</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                    <span class="font-caption-2 text-caption-2 text-secondary font-medium">Cuti Bersama</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors font-callout text-callout font-medium cursor-pointer" type="button" data-share-plan data-detail={`${bridge.leaveDates.length} cuti jadi ${bridge.streakDays} hari libur`}>
+                    <span class="material-symbols-outlined text-[16px]">ios_share</span>
+                    <span>Bagikan</span>
+                </button>
+                <button class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-primary text-on-primary hover:bg-primary/90 transition-all font-callout text-callout font-semibold shadow-sm cursor-pointer" type="button" data-save-plan>
+                    <span class="material-symbols-outlined text-[16px]">bookmark_add</span>
+                    <span>Simpan ke Kalender</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</article>
