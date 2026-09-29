@@ -1,1 +1,118 @@
 @import "tailwindcss";
+
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f7;
+    --bg-elevated: #ffffff;
+    --text-primary: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --accent: #0071e3;
+    --success: #34c759;
+    --warning: #ff9500;
+    --separator: #d2d2d7;
+    --ease-apple: cubic-bezier(0.32, 0.72, 0, 1);
+    --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter",
+        sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #000000;
+        --bg-secondary: #1c1c1e;
+        --bg-elevated: #2c2c2e;
+        --text-primary: #f5f5f7;
+        --text-secondary: #a1a1a6;
+        --accent: #0a84ff;
+        --success: #30d158;
+        --warning: #ff9f0a;
+        --separator: #38383a;
+    }
+}
+
+@theme inline {
+    --color-bg-primary: var(--bg-primary);
+    --color-bg-secondary: var(--bg-secondary);
+    --color-bg-elevated: var(--bg-elevated);
+    --color-text-primary: var(--text-primary);
+    --color-text-secondary: var(--text-secondary);
+    --color-accent: var(--accent);
+    --color-success: var(--success);
+    --color-warning: var(--warning);
+    --color-separator: var(--separator);
+    --font-system: var(--font-system);
+    --ease-apple: var(--ease-apple);
+}
+
+html {
+    font-family: var(--font-system);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    margin: 0;
+    line-height: 1.5;
+    font-size: 15px;
+}
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+::selection {
+    background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.display-num {
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+.tnum {
+    font-variant-numeric: tabular-nums;
+}
+.card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--separator);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+    .card {
+        box-shadow: none;
+    }
+}
+@keyframes rise-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.rise-in {
+    animation: rise-in 220ms var(--ease-apple) both;
+}
+
+.no-scrollbar {
+    scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rise-in {
+        animation: none;
+    }
+    * {
+        transition-duration: 0.01ms !important;
+    }
+}

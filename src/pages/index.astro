@@ -1,17 +1,115 @@
 ---
+import '../styles/global.css';
+import { getHolidays } from '../lib/holiday';
+import { buildCalendar, topBridges } from '../lib/engine';
+import { LeavePlanner } from '../components/react/LeavePlanner';
 
+const year = new Date().getFullYear() === 2026 || new Date() >= new Date(2026, 0, 1) ? 2026 : 2026;
+const holidays = await getHolidays(year);
+const days = buildCalendar(year, holidays);
+const top = topBridges(days, 3);
+
+const fmt = (d: string, opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long' }) =>
+    new Intl.DateTimeFormat('id-ID', opts).format(new Date(`${d}T00:00:00`));
+
+const nationals = holidays.filter((h) => !h.isCutiBersama);
+const cutiBersama = holidays.filter((h) => h.isCutiBersama);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<html lang="id">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Liburin — Rencanakan cuti, dapatkan libur terpanjang {year}</title>
+        <meta
+            name="description"
+            content={`Masukkan jatah cutimu dan Liburin merekomendasikan tanggal cuti terbaik untuk libur panjang berturut-turut, berdasarkan kalender resmi SKB 3 Menteri ${year}.`}
+        />
+    </head>
+    <body>
+        <header
+            class="sticky top-0 z-10 border-b border-separator/60 bg-bg-primary/70 backdrop-blur-xl"
+            style="border-color: color-mix(in srgb, var(--separator) 60%, transparent)"
+        >
+            <div class="mx-auto flex max-w-280 items-center justify-between px-6 py-3 md:px-16">
+                <a href="/" class="text-[15px] font-semibold no-underline text-text-primary">
+                    Liburin
+                </a>
+                <a
+                    href="#daftar-libur"
+                    class="text-[13px] font-medium text-accent no-underline"
+                >
+                    Daftar libur {year}
+                </a>
+            </div>
+        </header>
+        <main class="mx-auto max-w-280 px-6 py-12 md:px-16 md:py-16 flex flex-col gap-16">
+            {top[0] && (
+                <section class="flex flex-col items-center gap-4 py-8 text-center md:py-16">
+                    <p class="my-0 text-sm font-semibold uppercase tracking-wide text-accent">
+                        Libur terpanjang tahun {year}
+                    </p>
+                    <h1 class="display-num my-0 text-[40px] font-bold md:text-[64px]">
+                        <span class="tnum">{top[0].streakDays}</span> hari libur
+                    </h1>
+                    <p class="m-0 max-w-xl text-[15px] text-text-secondary md:text-base">
+                        Cukup ambil{' '}
+                        <strong class="text-text-primary">
+                            {top[0].leaveDates.length} hari cuti
+                        </strong>{' '}
+                        pada{' '}
+                        <strong class="text-text-primary">
+                            {top[0].leaveDates.map((d) => fmt(d)).join(', ')}
+                        </strong>{' '}
+                        — libur {fmt(top[0].streakStart)} sampai {fmt(top[0].streakEnd, { weekday: 'long', day: 'numeric', month: 'long' })}.
+                    </p>
+                </section>
+            )}
+
+            <LeavePlanner client:load holidays={holidays} year={year} />
+
+            <section id="daftar-libur" class="flex scroll-mt-16 flex-col gap-6">
+                <h2 class="m-0 text-xl font-semibold">
+                    Daftar Hari Libur Nasional & Cuti Bersama {year}
+                </h2>
+                <div class="card overflow-x-auto p-0">
+                    <table class="w-full text-left text-[15px]">
+                        <thead>
+                            <tr class="border-b border-separator text-xs uppercase tracking-wide text-text-secondary">
+                                <th class="px-6 py-4 font-medium">Tanggal</th>
+                                <th class="px-6 py-4 font-medium">Nama</th>
+                                <th class="px-6 py-4 font-medium">Jenis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {holidays.map((h) => (
+                                <tr class="border-b border-separator last:border-0">
+                                    <td class="tnum px-6 py-3 whitespace-nowrap">
+                                        {fmt(h.date, { weekday: 'short', day: 'numeric', month: 'long' })}
+                                    </td>
+                                    <td class="px-6 py-3">{h.name}</td>
+                                    <td class="px-6 py-3">
+                                        <span
+                                            class="rounded-full px-3 py-1 text-xs font-medium"
+                                            style={`background: color-mix(in srgb, ${
+                                                h.isCutiBersama ? 'var(--success)' : 'var(--warning)'
+                                            } 14%, transparent); color: ${
+                                                h.isCutiBersama ? 'var(--success)' : 'var(--warning)'
+                                            }`}
+                                        >
+                                            {h.isCutiBersama ? 'Cuti Bersama' : 'Libur Nasional'}
+                                        </span>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="m-0 text-xs text-text-secondary">
+                    Sumber: SKB 3 Menteri tentang Hari Libur Nasional dan Cuti Bersama Tahun {year} ({nationals.length} hari libur nasional, {cutiBersama.length} cuti bersama). Cuti bersama bersifat anjuran — kebijakan dapat berbeda di tiap perusahaan.
+                </p>
+            </section>
+        </main>
+    </body>
 </html>
