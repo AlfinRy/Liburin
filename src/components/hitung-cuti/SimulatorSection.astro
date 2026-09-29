@@ -18,8 +18,7 @@ const { year, holidays } = Astro.props;
                 Berapa jatah cuti tahunanmu?
             </h1>
             <p class="font-body-large text-body-large text-on-surface-variant mt-space-xs mb-0">
-                Liburin menyusun kombinasi tanggal paling efisien dari cuti bersama dan hari
-                kejepit nasional {year}.
+                Kombinasi cuti paling efisien untuk {year}.
             </p>
         </div>
 
@@ -39,11 +38,11 @@ const { year, holidays } = Astro.props;
                 </div>
 
                 <div class="w-full max-w-sm mt-space-md flex flex-col items-center">
-                    <input class="w-full h-2 bg-surface-container rounded-full appearance-none cursor-pointer accent-primary-container focus:outline-none" id="leave-slider" max="20" min="1" step="1" type="range" value="12" />
+                    <input class="w-full h-2" id="leave-slider" max="20" min="1" step="1" type="range" value="12" />
                     <div class="w-full flex justify-between items-center mt-2 px-1 text-on-surface-variant font-caption-2 text-caption-2">
-                        <span>1 Hari</span>
-                        <span class="font-semibold text-primary">Standar: 12 Hari</span>
-                        <span>20 Hari</span>
+                        <span>1</span>
+                        <span class="font-semibold text-primary">Standar 12</span>
+                        <span>20</span>
                     </div>
                 </div>
 
@@ -55,28 +54,28 @@ const { year, holidays } = Astro.props;
                     </div>
                     <div class="flex flex-wrap gap-2" id="filter-chips">
                         <button class="chip active px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-primary-container text-on-primary shadow-sm cursor-pointer" data-chip="semua" type="button">
-                            Semua Bulan
+                            Semua
                         </button>
                         <button class="chip px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high cursor-pointer" data-chip="sem1" type="button">
-                            Semester 1 (Jan - Jun)
+                            Jan – Jun
                         </button>
                         <button class="chip px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high cursor-pointer" data-chip="sem2" type="button">
-                            Semester 2 (Jul - Des)
+                            Jul – Des
                         </button>
                         <button class="chip px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high flex items-center gap-1.5 cursor-pointer" data-chip="wisata" type="button">
                             <span class="material-symbols-outlined text-[16px]">beach_access</span>
-                            <span>Prioritas Wisata</span>
+                            <span>Wisata</span>
                         </button>
                         <button class="chip px-3.5 py-1.5 rounded-full font-callout text-callout transition-all duration-150 bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high flex items-center gap-1.5 cursor-pointer" data-chip="mudik" type="button">
                             <span class="material-symbols-outlined text-[16px]">home_pin</span>
-                            <span>Prioritas Mudik</span>
+                            <span>Mudik</span>
                         </button>
                     </div>
                 </div>
 
                 <div class="w-full mt-space-lg pt-space-xs">
                     <a class="w-full py-3.5 px-space-lg rounded-full bg-primary text-on-primary font-headline-3 text-headline-3 flex items-center justify-center gap-2 hover:opacity-95 active:scale-[0.99] transition-all duration-150 group no-underline" id="cta-rekomendasi" href={`/rekomendasi?year=${year}&quota=12`}>
-                        <span>Cari Rekomendasi Terbaik</span>
+                        <span>Cari Rekomendasi</span>
                         <span class="material-symbols-outlined text-[20px] transition-transform duration-200 group-hover:translate-x-1">arrow_forward</span>
                     </a>
                 </div>
@@ -90,12 +89,12 @@ const { year, holidays } = Astro.props;
                     <span class="font-callout text-callout font-bold text-on-surface tabular-nums shrink-0" id="multiplier-badge">-×</span>
                 </div>
                 <p class="font-body-large text-body-large text-on-surface mb-space-md">
-                    Dengan <span class="font-semibold text-primary" id="summary-cuti">12 hari</span> cuti, kamu berpotensi mendapatkan hingga
-                    <span class="font-bold text-on-surface underline decoration-secondary decoration-2 underline-offset-4" id="summary-libur">- hari libur</span> sepanjang {year}.
+                    Dengan <span class="font-semibold text-primary" id="summary-cuti">12 hari</span> cuti → hingga
+                    <span class="font-bold text-on-surface underline decoration-secondary decoration-2 underline-offset-4" id="summary-libur">- hari libur</span> di {year}.
                 </p>
                 <div class="space-y-space-xs">
                     <div class="flex justify-between items-center font-caption-1 text-caption-1 text-on-surface-variant">
-                        <span>Efisiensi Penggabungan (Jatah Cuti + Tanggal Merah)</span>
+                        <span>Efisiensi penggabungan</span>
                         <span class="font-semibold text-on-surface" id="efficiency-percent">-% Optimal</span>
                     </div>
                     <div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
@@ -105,11 +104,11 @@ const { year, holidays } = Astro.props;
                     <div class="flex items-center gap-space-md pt-1 font-caption-2 text-caption-2 text-on-surface-variant">
                         <div class="flex items-center gap-1.5">
                             <span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
-                            <span>Cuti Pribadi</span>
+                            <span>Cutimu</span>
                         </div>
                         <div class="flex items-center gap-1.5">
                             <span class="w-2.5 h-2.5 rounded-full bg-secondary-fixed"></span>
-                            <span>Bonus Weekend & Hari Merah</span>
+                            <span>Bonus libur</span>
                         </div>
                     </div>
                 </div>
@@ -119,7 +118,7 @@ const { year, holidays } = Astro.props;
                 <div>
                     <h3 class="font-headline-3 text-headline-3 text-on-surface m-0 mb-space-xs">Tips perencanaan</h3>
                     <p class="font-body-default text-body-default text-on-surface-variant leading-snug m-0" id="tips-text">
-                        Ambil cuti di hari kejepit di antara libur nasional dan akhir pekan untuk melipatgandakan hari liburmu.
+                        Cuti di hari kejepit melipatgandakan liburmu.
                     </p>
                 </div>
                 <div class="mt-space-md pt-space-xs flex items-center justify-end">
@@ -167,7 +166,15 @@ const { year, holidays } = Astro.props;
         return cache.get(quota)!;
     }
 
+    const setFill = (input: HTMLInputElement) => {
+        const min = Number(input.min) || 0;
+        const max = Number(input.max) || 100;
+        const pct = ((Number(input.value) - min) / (max - min)) * 100;
+        input.style.setProperty('--range-fill', `${pct}%`);
+    };
+
     function updateUI() {
+        setFill(leaveSlider!);
         const stats = compute(currentLeave);
         leaveValEl!.textContent = String(currentLeave);
         leaveSlider!.value = String(currentLeave);
@@ -185,7 +192,7 @@ const { year, holidays } = Astro.props;
         const best = stats.bridges[0];
         if (best && tipsText && tipsBadge) {
             const bonus = best.streakDays - best.leaveDates.length;
-            tipsText.textContent = `Ambil ${best.leaveDates.length} hari cuti untuk mendapatkan ${best.streakDays} hari libur berturut-turut, plus ${bonus} hari gratis dari libur nasional dan weekend.`;
+            tipsText.textContent = `${best.leaveDates.length} cuti → ${best.streakDays} hari libur beruntun, ${bonus} hari gratis.`;
             tipsBadge.textContent = `Hemat ${Math.round((bonus / best.streakDays) * 100)}%`;
         }
     }

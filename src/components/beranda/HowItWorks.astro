@@ -1,16 +1,16 @@
 ---
 const steps = [
     {
-        title: 'Masukkan sisa jatah cuti',
-        desc: 'Jumlah hari cuti tahunan yang masih kamu miliki.',
+        title: 'Masukkan sisa cuti',
+        desc: 'Sisa cutimu hari ini.',
     },
     {
-        title: 'Algoritma mencari hari kejepit',
-        desc: 'Celah hari kerja di antara libur nasional dan akhir pekan dijadwalkan sebagai jembatan.',
+        title: 'Algoritma cari hari kejepit',
+        desc: 'Cuti dijepit di antara libur dan weekend.',
     },
     {
-        title: 'Dapatkan rencana cuti',
-        desc: 'Kombinasi tanggal dengan libur beruntun terpanjang, siap diajukan.',
+        title: 'Dapat rencana cuti',
+        desc: 'Rangkaian libur terpanjang, siap diajukan.',
     },
 ];
 ---
@@ -23,7 +23,7 @@ const steps = [
         <ol class="grid grid-cols-1 md:grid-cols-3 gap-space-lg list-none m-0 p-0">
             {
                 steps.map((s, i) => (
-                    <li class="border-t border-surface-container-high pt-space-sm">
+                <li class="border-t border-surface-container-high pt-space-sm" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
                         <p class="font-caption-1 text-caption-1 text-primary font-bold tabular-nums m-0">{i + 1}</p>
                         <h3 class="font-headline-3 text-headline-3 font-semibold text-on-surface mt-1 mb-1">{s.title}</h3>
                         <p class="font-body-default text-body-default text-on-surface-variant m-0">{s.desc}</p>

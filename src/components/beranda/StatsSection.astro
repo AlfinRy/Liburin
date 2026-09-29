@@ -30,8 +30,8 @@ const golden = findBridges(days).filter((b) => b.streakDays >= 8 && b.leaveDates
 
 const stats = [
     { value: nationals + cutiBersama, unit: 'hari', text: 'libur resmi' , detail: `${nationals} libur nasional + ${cutiBersama} cuti bersama` },
-    { value: naturalStreaks, unit: 'periode', text: 'long weekend tanpa cuti', detail: '3+ hari beruntun dari penanggalan nasional' },
-    { value: golden, unit: 'periode', text: 'libur 8+ hari', detail: 'cukup 2-3 hari cuti kerja' },
+    { value: naturalStreaks, unit: 'periode', text: 'long weekend tanpa cuti', detail: '3+ hari beruntun' },
+    { value: golden, unit: 'periode', text: 'libur 8+ hari', detail: 'cukup 2–3 hari cuti' },
 ];
 ---
 
@@ -39,8 +39,8 @@ const stats = [
     <div class="max-w-6xl mx-auto px-6">
         <dl class="grid grid-cols-1 sm:grid-cols-3 border-t border-surface-container-high">
             {
-                stats.map((s) => (
-                    <div class="py-space-md sm:px-space-md sm:first:pl-0 sm:border-l sm:first:border-l-0 border-surface-container-high">
+                stats.map((s, i) => (
+                    <div class="py-space-md sm:px-space-md sm:first:pl-0 sm:border-l sm:first:border-l-0 border-surface-container-high" data-reveal style={`--reveal-delay: ${i * 100}ms`}>
                         <dd class="font-headline-1 text-headline-1 font-bold text-on-surface tabular-nums m-0">
                             {s.value} <span class="font-body-default text-body-default font-medium text-on-surface-variant">{s.unit}</span>
                         </dd>

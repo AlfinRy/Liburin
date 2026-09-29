@@ -53,6 +53,7 @@ const stripClass = compact
     class={`recommendation-card rounded-xl p-space-md md:p-space-lg border border-surface-container-high transition-colors duration-200 hover:border-outline-variant bg-surface-container-lowest ${featured ? '' : ''}`}
     data-category={`${category} efficiency`}
     data-period={`${idDate(bridge.streakStart)} - ${idDate(bridge.streakEnd)}`}
+    data-reveal
 >
     <div class="flex flex-col gap-space-md">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
@@ -60,7 +61,7 @@ const stripClass = compact
                 {
                     featured ? (
                         <span class="font-caption-1 text-caption-1 font-semibold text-primary">
-                            Rekomendasi terbaik
+                            Terbaik
                         </span>
                     ) : (
                         <span class="font-caption-1 text-caption-1 text-on-surface-variant">
@@ -85,7 +86,7 @@ const stripClass = compact
                     {eventNames || `${bridge.streakDays} Hari Libur Beruntun`}
                 </h2>
                 <p class="font-footnote text-footnote text-on-surface-variant">
-                    Ambil cuti: {bridge.leaveDates.map((d) => `${weekdayShort(d)} ${idDate(d, { day: 'numeric', month: 'short' })}`).join(', ')}
+                    Cuti: {bridge.leaveDates.map((d) => `${weekdayShort(d)} ${idDate(d, { day: 'numeric', month: 'short' })}`).join(', ')}
                 </p>
             </div>
             <div class={`md:col-span-8 bg-surface-container-low/70 rounded-xl p-space-sm flex flex-col justify-center ${featured ? '' : 'md:col-span-8'}`}>
@@ -124,7 +125,7 @@ const stripClass = compact
                 </div>
                 <div class="flex items-center gap-1.5">
                     <span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
-                    <span class="font-caption-2 text-caption-2 text-primary font-medium">Cuti Diambil ({bridge.leaveDates.length})</span>
+                    <span class="font-caption-2 text-caption-2 text-primary font-medium">Cuti ({bridge.leaveDates.length})</span>
                 </div>
                 <div class="flex items-center gap-1.5">
                     <span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
@@ -138,7 +139,7 @@ const stripClass = compact
                 </button>
                 <button class="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-primary text-on-primary hover:bg-primary/90 transition-all font-callout text-callout font-semibold shadow-sm cursor-pointer" type="button" data-save-plan>
                     <span class="material-symbols-outlined text-[16px]">bookmark_add</span>
-                    <span>Simpan ke Kalender</span>
+                    <span>Simpan</span>
                 </button>
             </div>
         </div>

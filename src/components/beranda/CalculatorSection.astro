@@ -12,13 +12,16 @@ const { year, maxQuota, holidays } = Astro.props;
 
 <section class="w-full pb-space-xl">
     <div class="max-w-6xl mx-auto px-6">
-        <div class="border border-surface-container-high rounded-xl bg-surface-container-lowest p-space-lg md:p-space-xl">
+        <div
+            class="border border-surface-container-high rounded-2xl bg-surface-container-lowest p-space-lg md:p-space-xl shadow-tint"
+            data-reveal
+        >
             <div class="max-w-3xl">
                 <h2 class="font-headline-2 text-headline-2 font-bold text-on-surface m-0">
                     Berapa sisa jatah cutimu?
                 </h2>
                 <p class="font-body-default text-body-default text-on-surface-variant mt-1 mb-0">
-                    Geser untuk melihat potensi total hari libur dari jatah cutimu.
+                    Geser untuk melihat potensinya.
                 </p>
             </div>
             <div class="mt-space-lg grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
@@ -32,7 +35,7 @@ const { year, maxQuota, holidays } = Astro.props;
                                 6 hari
                             </span>
                         </div>
-                        <input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" id="leaveSlider" max={maxQuota} min="1" type="range" value="6" />
+                        <input class="w-full h-2 rounded-full" id="leaveSlider" max={maxQuota} min="1" type="range" value="6" />
                         <div class="flex justify-between text-caption-2 font-caption-2 text-on-surface-variant mt-1.5 tabular-nums">
                             <span>1</span>
                             <span>{maxQuota}</span>
@@ -93,7 +96,16 @@ const { year, maxQuota, holidays } = Astro.props;
         return cache.get(quota)!;
     }
 
+    const setFill = (input: HTMLInputElement) => {
+        const min = Number(input.min) || 0;
+        const max = Number(input.max) || 100;
+        const pct = ((Number(input.value) - min) / (max - min)) * 100;
+        input.style.setProperty('--range-fill', `${pct}%`);
+    };
+    setFill(slider);
+
     slider.addEventListener('input', () => {
+        setFill(slider);
         const val = parseInt(slider.value, 10);
         sliderText!.textContent = `${val} hari`;
         const rec = compute(val);

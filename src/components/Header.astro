@@ -17,21 +17,25 @@ const currentYear = new Date().getFullYear();
 const yearOptions = [currentYear - 1, currentYear];
 ---
 
-<header class="fixed top-0 left-0 right-0 z-50 bg-surface border-b border-surface-container-high">
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface/85 border-b border-surface-container-high/80 backdrop-blur-xl backdrop-saturate-150">
     <div class="h-16 max-w-6xl mx-auto px-6 flex items-center justify-between gap-space-md">
-        <a href={navItems[0].href} class="flex items-center gap-2.5 no-underline text-inherit">
-            <div class="h-7 w-7 rounded-lg bg-primary text-on-primary flex items-center justify-center">
+        <a href={navItems[0].href} class="flex items-center gap-2.5 no-underline text-inherit group/logo">
+            <div
+                class="h-7 w-7 rounded-lg bg-primary text-on-primary flex items-center justify-center shadow-tint transition-transform duration-200 group-hover/logo:scale-105"
+            >
                 <span class="material-symbols-outlined text-[18px]">event_available</span>
             </div>
             <span class="font-headline-3 text-headline-3 text-on-surface font-bold tracking-tight">
                 Liburin
             </span>
-            <span class="hidden sm:inline font-caption-1 text-caption-1 text-on-surface-variant tabular-nums">
+            <span
+                class="hidden sm:inline font-caption-1 text-caption-1 text-on-surface-variant tabular-nums px-1.5 py-0.5 rounded-md bg-surface-container"
+            >
                 {year}
             </span>
         </a>
 
-        <nav class="hidden lg:flex items-center gap-1">
+        <nav class="hidden lg:flex items-center gap-1" aria-label="Navigasi utama">
             {
                 navItems.map((item) =>
                     item.path === activePath ? (
@@ -44,7 +48,7 @@ const yearOptions = [currentYear - 1, currentYear];
                         </a>
                     ) : (
                         <a
-                            class="px-3 py-1.5 rounded-lg font-callout text-callout text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors no-underline"
+                            class="px-3 py-1.5 rounded-lg font-callout text-callout text-on-surface-variant hover:text-on-surface hover:bg-surface-container active:scale-[0.97] transition-all no-underline"
                             href={item.href}
                         >
                             {item.label}
@@ -55,13 +59,15 @@ const yearOptions = [currentYear - 1, currentYear];
         </nav>
 
         <div class="flex items-center gap-space-sm">
-            <div class="flex items-center p-0.5 rounded-lg bg-surface-container-low border border-surface-container-high">
+            <div
+                class="flex items-center p-0.5 rounded-lg bg-surface-container-low border border-surface-container-high"
+            >
                 {
                     yearOptions.map((y) => (
                         <a
                             href={`?year=${y}`}
                             class:list={[
-                                'px-2.5 py-1 rounded-md font-caption-1 text-caption-1 font-semibold tabular-nums transition-colors no-underline',
+                                'px-2.5 py-1 rounded-md font-caption-1 text-caption-1 font-semibold tabular-nums transition-all no-underline',
                                 y === year
                                     ? 'bg-surface-container-lowest text-on-surface shadow-xs'
                                     : 'text-on-surface-variant hover:text-on-surface',
@@ -75,12 +81,65 @@ const yearOptions = [currentYear - 1, currentYear];
 
             <button
                 aria-label="Beralih mode tema"
-                class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
+                class="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container active:scale-90 transition-all cursor-pointer"
                 type="button"
                 data-theme-toggle
             >
                 <span class="material-symbols-outlined text-[20px]">dark_mode</span>
             </button>
+
+            <button
+                aria-label="Buka menu navigasi"
+                aria-expanded="false"
+                aria-controls="mobile-nav"
+                class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container active:scale-90 transition-all cursor-pointer"
+                type="button"
+                data-menu-toggle
+            >
+                <span class="material-symbols-outlined text-[20px]">menu</span>
+            </button>
         </div>
     </div>
+
+    <nav
+        id="mobile-nav"
+        class="lg:hidden hidden border-t border-surface-container-high/80 bg-surface/95 backdrop-blur-xl"
+        aria-label="Navigasi mobile"
+        data-mobile-nav
+    >
+        <div class="max-w-6xl mx-auto px-6 py-space-sm flex flex-col gap-0.5">
+            {
+                navItems.map((item) => (
+                    <a
+                        aria-current={item.path === activePath ? 'page' : undefined}
+                        class:list={[
+                            'px-3 py-2.5 rounded-lg font-callout text-callout font-semibold no-underline transition-colors',
+                            item.path === activePath
+                                ? 'bg-surface-container-high text-on-surface'
+                                : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container',
+                        ]}
+                        href={item.href}
+                    >
+                        {item.label}
+                    </a>
+                ))
+            }
+        </div>
+    </nav>
 </header>
+
+<script>
+    const menuToggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+    const mobileNav = document.querySelector<HTMLElement>('[data-mobile-nav]');
+
+    if (menuToggle && mobileNav) {
+        const icon = menuToggle.querySelector('.material-symbols-outlined');
+        menuToggle.addEventListener('click', () => {
+            const isOpen = !mobileNav.classList.contains('hidden');
+            mobileNav.classList.toggle('hidden');
+            menuToggle.setAttribute('aria-expanded', String(!isOpen));
+            menuToggle.setAttribute('aria-label', isOpen ? 'Buka menu navigasi' : 'Tutup menu navigasi');
+            if (icon) icon.textContent = isOpen ? 'menu' : 'close';
+        });
+    }
+</script>

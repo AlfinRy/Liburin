@@ -35,15 +35,15 @@ const monthLabel = (b: Bridge) =>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
         {
-            bridges.map((b) => (
-                <div class="rounded-xl p-space-md border border-surface-container-high bg-surface-container-lowest flex flex-col justify-between">
+            bridges.map((b, i) => (
+                <div class="rounded-xl p-space-md border border-surface-container-high bg-surface-container-lowest shadow-tint hover:shadow-tint-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
                     <div>
                         <div class="flex items-center justify-between mb-space-xs">
                             <span class="font-caption-1 text-caption-1 text-on-surface-variant tabular-nums">{monthLabel(b)}</span>
                         </div>
                         <h3 class="font-headline-3 text-headline-3 text-on-surface m-0">{b.streakDays} hari libur</h3>
                         <p class="font-footnote text-footnote text-on-surface-variant mt-1 mb-0">
-                            {nameFor(b)} · cukup {b.leaveDates.length} hari cuti kerja.
+                            {nameFor(b)} · {b.leaveDates.length} cuti.
                         </p>
                     </div>
                     <div class="mt-space-md pt-space-xs flex items-center justify-between">
@@ -66,14 +66,14 @@ const monthLabel = (b: Bridge) =>
         </div>
         <div>
             <h4 class="font-headline-3 text-headline-3 text-on-surface">
-                Ingin sinkronisasi otomatis ke Google Calendar / Apple iCal?
+                Sinkron otomatis ke kalendermu
             </h4>
             <p class="font-footnote text-footnote text-on-surface-variant mt-0.5">
-                Dapatkan pengingat H-14 sebelum batas pengajuan cuti HR kantor.
+                Google Calendar / Apple iCal · pengingat H-14.
             </p>
         </div>
     </div>
     <a class="whitespace-nowrap px-space-md py-2 rounded-full bg-surface-container-lowest text-primary font-callout text-callout font-semibold shadow-sm hover:bg-surface-container-high transition-colors no-underline" href="/kalender-tahunan">
-        Pelajari Format Kalender
+        Pelajari Format
     </a>
 </div>

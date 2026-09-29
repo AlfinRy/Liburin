@@ -78,7 +78,7 @@ const total = bridges
         btn.addEventListener('click', () => {
             const card = btn.closest('.recommendation-card') as HTMLElement | null;
             const period = card?.dataset.period ?? 'rencana';
-            showToast(`Rencana "${period}" berhasil ditambahkan ke draft cuti.`);
+            showToast(`Rencana "${period}" masuk draft cuti.`);
         });
     });
 
@@ -106,8 +106,8 @@ const total = bridges
             const type = (btn as HTMLElement).dataset.export;
             showToast(
                 type === 'gcal'
-                    ? 'Menyiapkan koneksi Google Calendar...'
-                    : 'Berkas Liburin berhasil disiapkan!'
+                    ? 'Menghubungkan Google Calendar…'
+                    : 'Berkas .ics berhasil diunduh.'
             );
         });
     });

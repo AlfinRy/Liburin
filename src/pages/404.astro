@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getHolidays } from '../lib/holiday';
+import { buildCalendar, topBridges } from '../lib/engine';
+import { idDate } from '../lib/format';
+
+const year = new Date().getFullYear();
+const holidays = await getHolidays(year);
+const best = topBridges(buildCalendar(year, holidays), 1)[0];
+---
+
+<BaseLayout title={`Halaman tidak ditemukan - Liburin`} activePath="beranda" year={year}>
+    <section class="max-w-3xl mx-auto px-6 py-24 text-center">
+        <p class="font-display-hero text-display-hero font-bold text-primary tabular-nums m-0" data-reveal>
+            404
+        </p>
+        <h1 class="font-headline-1 text-headline-1 text-on-surface font-bold mt-space-xs mb-space-sm" data-reveal style="--reveal-delay: 80ms">
+            Halaman ini sedang cuti.
+        </h1>
+        <p class="font-body-large text-body-large text-on-surface-variant mb-space-lg" data-reveal style="--reveal-delay: 160ms">
+            Tapi liburmu tidak harus menunggu.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-space-sm" data-reveal style="--reveal-delay: 240ms">
+            <a
+                href="/"
+                class="px-5 py-2.5 rounded-full bg-primary text-on-primary font-callout text-callout font-semibold hover:bg-primary-container active:scale-[0.97] transition-all no-underline shadow-tint"
+            >
+                Kembali ke Beranda
+            </a>
+            {
+                best && (
+                    <a
+                        href="/rekomendasi"
+                        class="px-5 py-2.5 rounded-full border border-outline-variant text-on-surface font-callout text-callout font-semibold hover:bg-surface-container active:scale-[0.97] transition-all no-underline"
+                    >
+                        Rekomendasi cuti{' '}
+                        {idDate(best.streakStart, { day: 'numeric', month: 'short' })}–{idDate(best.streakEnd, { day: 'numeric', month: 'short' })}
+                    </a>
+                )
+            }
+        </div>
+    </section>
+</BaseLayout>

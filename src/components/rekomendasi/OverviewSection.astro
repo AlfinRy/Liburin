@@ -22,8 +22,7 @@ const takenShare = Math.min(96, Math.round((recommendation.totalLeaveUsed / Math
                     Rekomendasi cuti terpilih {year}
                 </h1>
                 <p class="font-body-large text-body-large text-on-surface-variant max-w-2xl mt-space-xs mb-0">
-                    Alokasi {quota} hari cuti tahunan, diurutkan berdasarkan rasio hari libur per
-                    hari cuti yang dipakai.
+                    {quota} hari cuti, diurutkan dari rasio libur terbaik.
                 </p>
             </div>
             <div class="flex flex-wrap items-center gap-2 pt-space-xs" id="filter-container">
@@ -32,10 +31,10 @@ const takenShare = Math.min(96, Math.round((recommendation.totalLeaveUsed / Math
                     <span class="tabular-nums">{total}</span>
                 </button>
                 <button class="filter-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all flex items-center gap-1.5 cursor-pointer" data-filter="efficiency" type="button">
-                    <span>Efisiensi tertinggi</span>
+                    <span>Paling efisien</span>
                 </button>
                 <button class="filter-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all flex items-center gap-1.5 cursor-pointer" data-filter="weekend" type="button">
-                    <span>Long weekend (3–4 hari)</span>
+                    <span>Long weekend</span>
                 </button>
                 <button class="filter-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all flex items-center gap-1.5 cursor-pointer" data-filter="super" type="button">
                     <span>Libur 7+ hari</span>
@@ -57,7 +56,7 @@ const takenShare = Math.min(96, Math.round((recommendation.totalLeaveUsed / Math
             </div>
             <div class="my-space-sm space-y-1.5">
                 <div class="flex justify-between font-caption-2 text-caption-2 text-on-surface-variant">
-                    <span>Total Potensi Libur Diperoleh</span>
+                    <span>Total libur didapat</span>
                     <span class="font-semibold text-secondary tabular-nums">
                         {gained} Hari (+{Math.round((gained / Math.max(recommendation.totalLeaveUsed, 1) - 1) * 100)}%)
                     </span>

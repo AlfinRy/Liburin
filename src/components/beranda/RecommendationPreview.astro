@@ -25,8 +25,8 @@ const cards = bridges.slice(0, 3);
         </div>
         <div class="divide-y divide-surface-container-high border-y border-surface-container-high">
             {
-                cards.map((b) => (
-                    <div class="py-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+                cards.map((b, i) => (
+                    <div class="py-space-md flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm transition-colors hover:bg-surface-container-low/60 -mx-4 px-4 rounded-lg" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
                         <div>
                             <p class="font-footnote text-footnote text-on-surface-variant m-0 tabular-nums">
                                 {idDate(b.streakStart, { day: 'numeric', month: 'short' })} – {idDate(b.streakEnd, { day: 'numeric', month: 'short' })}
@@ -35,7 +35,7 @@ const cards = bridges.slice(0, 3);
                                 {b.leaveDates.length} cuti → {b.streakDays} hari libur
                             </h3>
                             <p class="font-footnote text-footnote text-on-surface-variant mt-1 mb-0 tabular-nums">
-                                Ambil {b.leaveDates.map((d) => idDate(d, { day: 'numeric', month: 'short' })).join(', ')}
+                                Cuti: {b.leaveDates.map((d) => idDate(d, { day: 'numeric', month: 'short' })).join(', ')}
                             </p>
                         </div>
                         <span class="font-headline-2 text-headline-2 font-bold text-primary tabular-nums shrink-0">

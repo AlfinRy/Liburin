@@ -64,24 +64,27 @@
     --spacing-gutter: 1rem;
     --spacing-gutter-mobile: 0.75rem;
 
-    --font-body-default: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-headline-1: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-headline-2: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-headline-3: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-display-hero: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-display-hero-mobile: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-body-large: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-callout: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-footnote: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-caption-1: "Inter", ui-sans-serif, system-ui, sans-serif;
-    --font-caption-2: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-body-default: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-headline-1: "Bricolage Grotesque", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-headline-2: "Bricolage Grotesque", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-headline-3: "Bricolage Grotesque", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-display-hero: "Bricolage Grotesque", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-display-hero-mobile: "Bricolage Grotesque", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-body-large: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-callout: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-footnote: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-caption-1: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-caption-2: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 
-    --text-display-hero: 56px;
-    --text-display-hero--line-height: 64px;
-    --text-display-hero--letter-spacing: -0.03em;
-    --text-display-hero-mobile: 40px;
+    --shadow-tint: 0 1px 2px rgb(0 30 74 / 0.04), 0 8px 24px -6px rgb(0 30 74 / 0.08);
+    --shadow-tint-lg: 0 2px 4px rgb(0 30 74 / 0.05), 0 20px 48px -12px rgb(0 30 74 / 0.14);
+
+    --text-display-hero: 64px;
+    --text-display-hero--line-height: 68px;
+    --text-display-hero--letter-spacing: -0.035em;
+    --text-display-hero-mobile: 42px;
     --text-display-hero-mobile--line-height: 48px;
-    --text-display-hero-mobile--letter-spacing: -0.025em;
+    --text-display-hero-mobile--letter-spacing: -0.028em;
     --text-headline-1: 34px;
     --text-headline-1--line-height: 41px;
     --text-headline-1--letter-spacing: -0.02em;
@@ -119,10 +122,69 @@
         background: var(--color-surface);
         color: var(--color-on-surface);
         min-height: 100vh;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    html[data-theme='dark'] {
+        color-scheme: dark;
+
+        --color-primary: #a4c9ff;
+        --color-on-primary: #00315d;
+        --color-primary-container: #004a8f;
+        --color-on-primary-container: #d7e3ff;
+
+        --color-secondary: #7bdd93;
+        --color-on-secondary: #003914;
+        --color-secondary-container: #00521e;
+        --color-on-secondary-container: #99f8a8;
+
+        --color-tertiary: #ffb877;
+        --color-on-tertiary: #4c2a00;
+        --color-tertiary-container: #6b3f00;
+        --color-on-tertiary-container: #ffdcc2;
+
+        --color-error: #ffb4ab;
+        --color-on-error: #690005;
+        --color-error-container: #93000a;
+        --color-on-error-container: #ffdad6;
+
+        --color-surface: #111318;
+        --color-background: #111318;
+        --color-on-surface: #e3e6ee;
+        --color-on-background: #e3e6ee;
+        --color-surface-dim: #111318;
+        --color-surface-bright: #37393e;
+        --color-surface-container-lowest: #0b0e12;
+        --color-surface-container-low: #191c21;
+        --color-surface-container: #1d2025;
+        --color-surface-container-high: #272a2f;
+        --color-surface-container-highest: #32353a;
+        --color-on-surface-variant: #c3c7d5;
+        --color-surface-variant: #43474f;
+        --color-surface-tint: #a4c9ff;
+
+        --color-outline: #8d93a2;
+        --color-outline-variant: #43474f;
+        --color-inverse-surface: #e3e6ee;
+        --color-inverse-on-surface: #2f3033;
+        --color-inverse-primary: #0059b5;
+
+        --shadow-tint: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -6px rgb(0 0 0 / 0.45);
+        --shadow-tint-lg: 0 2px 4px rgb(0 0 0 / 0.35), 0 20px 48px -12px rgb(0 0 0 / 0.6);
     }
 
     ::selection {
-        background: color-mix(in srgb, var(--color-primary) 16%, transparent);
+        background: color-mix(in srgb, var(--color-primary) 24%, transparent);
+    }
+
+    h1,
+    h2,
+    h3 {
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
     }
 
     main > :first-child {
@@ -132,9 +194,79 @@
         margin-bottom: 0 !important;
     }
 
-    
-::-webkit-scrollbar {
-        display: none;
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: color-mix(in srgb, var(--color-on-surface-variant) 38%, transparent);
+        border-radius: 999px;
+        border: 3px solid var(--color-surface);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: color-mix(in srgb, var(--color-on-surface-variant) 60%, transparent);
+    }
+
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: color-mix(in srgb, var(--color-on-surface-variant) 38%, transparent)
+            var(--color-surface);
+    }
+
+    /* Film-grain overlay: memberi tekstur halus di atas flat digital */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        pointer-events: none;
+        opacity: 0.032;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    html[data-theme='dark'] body::before {
+        opacity: 0.05;
+    }
+
+    /* Background ambient: gradasi warna lembut + dot grid halus, di atas warna dasar */
+    body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background:
+            radial-gradient(
+                color-mix(in srgb, var(--color-on-surface) 3.5%, transparent) 1px,
+                transparent 1.2px
+            ),
+            radial-gradient(46rem 30rem at 6% -8%, color-mix(in srgb, var(--color-primary) 11%, transparent), transparent 65%),
+            radial-gradient(40rem 26rem at 102% 4%, color-mix(in srgb, var(--color-secondary) 8%, transparent), transparent 60%),
+            radial-gradient(48rem 34rem at 50% 118%, color-mix(in srgb, var(--color-tertiary) 7%, transparent), transparent 68%);
+        background-size: 26px 26px, 100% 100%, 100% 100%, 100% 100%;
+    }
+
+    html[data-theme='dark'] body::after {
+        background:
+            radial-gradient(
+                color-mix(in srgb, var(--color-on-surface) 4.5%, transparent) 1px,
+                transparent 1.2px
+            ),
+            radial-gradient(46rem 30rem at 6% -8%, color-mix(in srgb, var(--color-primary) 14%, transparent), transparent 65%),
+            radial-gradient(40rem 26rem at 102% 4%, color-mix(in srgb, var(--color-secondary) 9%, transparent), transparent 60%),
+            radial-gradient(48rem 34rem at 50% 118%, color-mix(in srgb, var(--color-tertiary) 10%, transparent), transparent 68%);
+        background-size: 26px 26px, 100% 100%, 100% 100%, 100% 100%;
+    }
+
+    .hero-glow {
+        background: radial-gradient(
+            60% 55% at 50% -8%,
+            color-mix(in srgb, var(--color-primary) 12%, transparent),
+            transparent 70%
+        );
     }
 
     input[type='range'] {
@@ -144,8 +276,154 @@
     :focus-visible {
         outline: 2px solid var(--color-primary);
         outline-offset: 2px;
+        border-radius: 4px;
     }
 
+    /* ---- Slider custom: track bergradasi + thumb yang hidup ---- */
+    input[type='range'] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: pointer;
+    }
+    input[type='range']::-webkit-slider-runnable-track {
+        height: 8px;
+        border-radius: 999px;
+        background: linear-gradient(
+            to right,
+            var(--color-primary) 0%,
+            var(--color-primary) var(--range-fill, 50%),
+            var(--color-surface-container-highest) var(--range-fill, 50%),
+            var(--color-surface-container-highest) 100%
+        );
+    }
+    input[type='range']::-moz-range-track {
+        height: 8px;
+        border-radius: 999px;
+        background: linear-gradient(
+            to right,
+            var(--color-primary) 0%,
+            var(--color-primary) var(--range-fill, 50%),
+            var(--color-surface-container-highest) var(--range-fill, 50%),
+            var(--color-surface-container-highest) 100%
+        );
+    }
+    input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        margin-top: -7px;
+        height: 22px;
+        width: 22px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        border: 3px solid var(--color-surface-container-lowest);
+        box-shadow: 0 2px 10px color-mix(in srgb, var(--color-primary) 45%, transparent);
+        transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+    }
+    input[type='range']::-moz-range-thumb {
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        background: var(--color-primary);
+        border: 3px solid var(--color-surface-container-lowest);
+        box-shadow: 0 2px 10px color-mix(in srgb, var(--color-primary) 45%, transparent);
+        transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
+    }
+    input[type='range']:hover::-webkit-slider-thumb {
+        transform: scale(1.18);
+    }
+    input[type='range']:hover::-moz-range-thumb {
+        transform: scale(1.18);
+    }
+    input[type='range']:active::-webkit-slider-thumb {
+        transform: scale(0.92);
+        box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-primary) 18%, transparent);
+    }
+    input[type='range']:active::-moz-range-thumb {
+        transform: scale(0.92);
+        box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-primary) 18%, transparent);
+    }
+
+    /* ---- Tooltip untuk data-tooltip ---- */
+    [data-tooltip] {
+        position: relative;
+    }
+    [data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 10px);
+        left: 50%;
+        transform: translateX(-50%) translateY(4px) scale(0.95);
+        background: var(--color-inverse-surface);
+        color: var(--color-inverse-on-surface);
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-family: var(--font-caption-1);
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1.3;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.18s ease, transform 0.18s ease;
+        z-index: 40;
+        box-shadow: var(--shadow-tint);
+    }
+    [data-tooltip]:hover::after,
+    [data-tooltip]:focus-visible::after {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+
+    /* ---- Reveal on scroll ---- */
+    [data-reveal] {
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+        transition-delay: var(--reveal-delay, 0ms);
+    }
+    [data-reveal].is-visible {
+        opacity: 1;
+        transform: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        [data-reveal] {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+        * {
+            scroll-behavior: auto !important;
+        }
+    }
+
+    @media (hover: none) {
+        [data-reveal] {
+            opacity: 1;
+            transform: none;
+            transition: none;
+        }
+    }
+
+    /* ---- Print: bersihkan kromatik UI saat ekspor kalender ---- */
+    @media print {
+        header,
+        footer,
+        body::before,
+        body::after {
+            display: none !important;
+        }
+        main {
+            padding-top: 0 !important;
+        }
+        body {
+            background: #fff;
+        }
+        .no-print {
+            display: none !important;
+        }
+    }
 }
 
 .material-symbols-outlined {
