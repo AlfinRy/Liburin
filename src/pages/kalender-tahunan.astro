@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getHolidays } from '../lib/holiday';
+import { buildCalendar, findBridges, topBridges } from '../lib/engine';
+import CalendarControls from '../components/kalender-tahunan/CalendarControls.astro';
+import MonthCard from '../components/kalender-tahunan/MonthCard.astro';
+
+const year = Number(Astro.url.searchParams.get('year')) || new Date().getFullYear();
+const holidays = await getHolidays(year);
+const days = buildCalendar(year, holidays);
+
+const recommended = new Set<string>();
+for (const b of topBridges(days, 8)) {
+    for (const d of b.leaveDates) recommended.add(d);
+}
+
+const best = topBridges(days, 1)[0];
+const multiplier = best ? `1:${best.efficiency.toFixed(1)}` : '1:0';
+---
+
+<BaseLayout
+    title={`Kalender Tahunan ${year} - Liburin`}
+    activePath="kalender-tahunan"
+    year={year}
+    mainClass="bg-surface"
+>
+    <div class="flex flex-col w-full">
+        <CalendarControls year={year} holidays={holidays} days={days} recommendedCount={recommended.size} multiplier={multiplier} />
+        <section class="max-w-7xl mx-auto w-full px-margin pb-space-xl">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-space-md">
+                {Array.from({ length: 12 }).map((_, m) => (
+                    <MonthCard year={year} month={m} days={days} recommended={recommended} holidays={holidays} />
+                ))}
+            </div>
+        </section>
+    </div>
+</BaseLayout>
+
+<script>
+    const btnAll = document.getElementById('btn-filter-all');
+    const btnBridge = document.getElementById('btn-filter-bridge');
+    if (btnAll && btnBridge) {
+        const setMode = (bridgeOnly: boolean) => {
+            btnAll.classList.toggle('bg-surface-container-lowest', !bridgeOnly);
+            btnAll.classList.toggle('text-primary', !bridgeOnly);
+            btnAll.classList.toggle('shadow-sm', !bridgeOnly);
+            btnBridge.classList.toggle('bg-surface-container-lowest', bridgeOnly);
+            btnBridge.classList.toggle('text-primary', bridgeOnly);
+            btnBridge.classList.toggle('shadow-sm', bridgeOnly);
+            document.querySelectorAll<HTMLElement>('[data-tooltip]').forEach((el) => {
+                const isBridge = el.dataset.tooltip?.includes('Rekomendasi') ?? false;
+                const isOff = !el.className.includes('month-card') && el.className.includes('rounded-full');
+                if (!isOff) return;
+                const dim = bridgeOnly && !isBridge;
+                el.style.opacity = dim ? '0.25' : '';
+            });
+        };
+        btnAll.addEventListener('click', () => setMode(false));
+        btnBridge.addEventListener('click', () => setMode(true));
+    }
+</script>

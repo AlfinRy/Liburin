@@ -1,0 +1,118 @@
+---
+import type { DayInfo, Holiday } from '../../lib/types';
+
+interface Props {
+    year: number;
+    month: number;
+    days: DayInfo[];
+    recommended: Set<string>;
+    holidays: Holiday[];
+}
+
+const MONTHS = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+];
+
+const { year, month, days, recommended, holidays } = Astro.props;
+
+const first = new Date(year, month, 1);
+const last = new Date(year, month + 1, 0);
+const offset = first.getDay();
+
+const holidayCount = holidays.filter((h) => {
+    const d = new Date(`${h.date}T00:00:00`);
+    return d.getFullYear() === year && d.getMonth() === month && !h.isCutiBersama;
+}).length;
+const cbCount = holidays.filter((h) => {
+    const d = new Date(`${h.date}T00:00:00`);
+    return d.getFullYear() === year && d.getMonth() === month && h.isCutiBersama;
+}).length;
+
+const byDate = new Map(days.map((d) => [d.date, d]));
+const monthDays: DayInfo[] = [];
+for (let d = 1; d <= last.getDate(); d++) {
+    const iso = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const info = byDate.get(iso);
+    if (info) monthDays.push(info);
+}
+
+let longest = 0;
+let run = 0;
+let longestRange = '';
+for (let i = 0; i < monthDays.length; i++) {
+    if (monthDays[i].status !== 'kerja' || recommended.has(monthDays[i].date)) {
+        if (run === 0) longestRange = monthDays[i].date;
+        run++;
+        if (run > longest) longest = run;
+    } else {
+        run = 0;
+    }
+}
+
+const note =
+    longest >= 3
+        ? {
+              text: `${new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short' }).format(new Date(`${longestRange}T00:00:00`))}: Rangkaian ${longest} hari`,
+              badge: `${longest} Hari`,
+              badgeCls: 'text-secondary font-semibold shrink-0',
+          }
+        : holidayCount + cbCount === 0
+          ? { text: 'Bulan Kerja Penuh', badge: 'Fokus', badgeCls: 'text-on-surface-variant shrink-0' }
+          : { text: 'Tanpa rangkaian panjang', badge: `${holidayCount + cbCount} Libur`, badgeCls: 'text-on-surface-variant shrink-0' };
+
+const dayClass = (day: DayInfo) => {
+    if (recommended.has(day.date))
+        return 'h-8 w-8 mx-auto rounded-full bg-primary-fixed text-primary font-bold flex items-center justify-center cursor-help';
+    if (day.status === 'libur_nasional')
+        return 'h-8 w-8 mx-auto rounded-full bg-tertiary-container text-on-tertiary font-bold flex items-center justify-center cursor-help';
+    if (day.status === 'cuti_bersama')
+        return 'h-8 w-8 mx-auto rounded-full bg-secondary text-on-secondary font-bold flex items-center justify-center cursor-help';
+    if (day.status === 'weekend')
+        return 'h-8 w-8 mx-auto rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-medium';
+    return 'h-8 w-8 mx-auto flex items-center justify-center';
+};
+
+const badgeText = holidayCount + cbCount === 0 ? '0 Libur' : holidayCount && cbCount ? `${holidayCount} Libur • ${cbCount} CB` : `${holidayCount || cbCount} ${cbCount ? 'Cuti Bersama' : 'Libur'}`;
+const badgeCls = holidayCount + cbCount === 0
+    ? 'px-2 py-0.5 rounded-full bg-surface-container font-caption-2 text-caption-2 text-on-surface-variant font-medium'
+    : 'px-2 py-0.5 rounded-full bg-secondary-fixed/40 text-on-secondary-fixed-variant font-caption-2 text-caption-2 font-medium';
+---
+
+<div class="month-card p-space-md rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
+    <div>
+        <div class="flex items-center justify-between pb-space-xs">
+            <h2 class="font-headline-3 text-headline-3 text-on-surface font-semibold">
+                {MONTHS[month]} {year}
+            </h2>
+            <span class={badgeCls}>{badgeText}</span>
+        </div>
+        <div class="grid grid-cols-7 text-center font-caption-2 text-caption-2 text-on-surface-variant py-1.5 mb-1">
+            <span class="text-error font-semibold">M</span>
+            <span>S</span>
+            <span>S</span>
+            <span>R</span>
+            <span>K</span>
+            <span>J</span>
+            <span class="text-on-surface-variant font-semibold">S</span>
+        </div>
+        <div class="grid grid-cols-7 gap-1 text-center font-caption-1 text-caption-1 tabular-nums">
+            {Array.from({ length: offset }).map(() => <span></span>)}
+            {
+                monthDays.map((day) =>
+                    day.name || recommended.has(day.date) ? (
+                        <button class={dayClass(day)} type="button" data-tooltip={`${new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short' }).format(new Date(`${day.date}T00:00:00`))}: ${recommended.has(day.date) ? 'Ambil Cuti (Rekomendasi)' : day.name}`}>
+                            {Number(day.date.slice(8, 10))}
+                        </button>
+                    ) : (
+                        <span class={dayClass(day)}>{Number(day.date.slice(8, 10))}</span>
+                    )
+                )
+            }
+        </div>
+    </div>
+    <div class="pt-space-sm mt-space-sm bg-surface-container-low rounded-lg p-2 text-on-surface-variant font-caption-2 text-caption-2 flex items-center justify-between">
+        <span class="truncate">{note.text}</span>
+        <span class={note.badgeCls}>{note.badge}</span>
+    </div>
+</div>

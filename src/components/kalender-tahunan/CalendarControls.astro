@@ -1,0 +1,97 @@
+---
+import type { DayInfo, Holiday } from '../../lib/types';
+
+interface Props {
+    year: number;
+    holidays: Holiday[];
+    days: DayInfo[];
+    recommendedCount: number;
+    multiplier: string;
+}
+
+const { year, holidays, days, recommendedCount, multiplier } = Astro.props;
+
+const nationals = holidays.filter((h) => !h.isCutiBersama).length;
+const cutiBersama = holidays.filter((h) => h.isCutiBersama).length;
+void days;
+---
+
+<section class="max-w-7xl mx-auto w-full px-margin py-space-lg space-y-space-md">
+    <div class="flex flex-wrap items-center justify-between gap-space-sm">
+        <div class="flex items-center gap-space-xs font-caption-1 text-caption-1 text-on-surface-variant">
+            <a href={`/?year=${year}`} class="no-underline text-inherit hover:text-on-surface transition-colors">Beranda</a>
+            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+            <span class="text-on-surface font-semibold">Kalender Tahunan</span>
+        </div>
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-on-surface font-caption-1 text-caption-1">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+            <span class="font-medium">SKB 3 Menteri Disinkronkan</span>
+        </div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-lg pb-space-sm">
+        <div class="space-y-space-xs max-w-3xl">
+            <h1 class="font-headline-1 text-headline-1 text-on-surface tracking-tight">
+                Kalender Tahunan {year}
+            </h1>
+            <p class="font-body-large text-body-large text-on-surface-variant">
+                Pemetaan lengkap Hari Libur Nasional, Cuti Bersama SKB 3 Menteri, dan rekomendasi
+                jembatan cuti cerdas untuk efisiensi libur maksimal.
+            </p>
+        </div>
+        <div class="flex flex-wrap items-center gap-space-sm shrink-0">
+            <div class="inline-flex p-1 rounded-full bg-surface-container-high shadow-inner" role="tablist">
+                <a href={`?year=${year - 1}`} class="px-5 py-2 rounded-full font-callout text-callout text-on-surface-variant hover:text-on-surface transition-all no-underline">
+                    {year - 1}
+                </a>
+                <span class="px-5 py-2 rounded-full font-callout text-callout font-semibold bg-surface-container-lowest text-on-surface shadow-sm transition-all">
+                    {year}
+                </span>
+            </div>
+            <div class="hidden sm:flex items-center gap-1 p-1 rounded-full bg-surface-container-high">
+                <button class="px-3.5 py-1.5 rounded-full font-caption-1 text-caption-1 font-semibold bg-surface-container-lowest text-primary shadow-sm cursor-pointer" id="btn-filter-all" type="button">
+                    Semua Penanda
+                </button>
+                <button class="px-3.5 py-1.5 rounded-full font-caption-1 text-caption-1 text-on-surface-variant hover:text-on-surface cursor-pointer" id="btn-filter-bridge" type="button">
+                    Hanya Bridge AI
+                </button>
+            </div>
+            <button class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container text-on-primary font-callout text-callout shadow-sm hover:opacity-90 active:scale-95 transition-all cursor-pointer" onclick="window.print()" type="button">
+                <span class="material-symbols-outlined text-[18px]">calendar_add_on</span>
+                <span>Ekspor Kalender</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="p-space-md rounded-xl bg-surface-container-low shadow-sm flex flex-wrap items-center justify-between gap-space-md">
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <div class="flex items-center gap-2">
+                <div class="w-3.5 h-3.5 rounded-full bg-tertiary-container shadow-sm flex items-center justify-center">
+                    <div class="w-1.5 h-1.5 rounded-full bg-on-tertiary"></div>
+                </div>
+                <span class="font-callout text-callout font-medium text-on-surface">Hari Libur Nasional</span>
+                <span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-caption-2 text-caption-2 font-bold">{nationals} Hari</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3.5 h-3.5 rounded-full bg-secondary shadow-sm flex items-center justify-center">
+                    <div class="w-1.5 h-1.5 rounded-full bg-on-secondary"></div>
+                </div>
+                <span class="font-callout text-callout font-medium text-on-surface">Cuti Bersama SKB</span>
+                <span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-caption-2 text-caption-2 font-bold">{cutiBersama} Hari</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3.5 h-3.5 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-caption-2 text-[10px] font-bold">★</div>
+                <span class="font-callout text-callout font-medium text-on-surface">Rekomendasi Cuti AI (Bridge)</span>
+                <span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-caption-2 text-caption-2 font-bold">{recommendedCount} Peluang</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-3.5 h-3.5 rounded bg-surface-container-highest"></div>
+                <span class="font-callout text-callout text-on-surface-variant">Akhir Pekan (Sabtu - Minggu)</span>
+            </div>
+        </div>
+        <div class="hidden xl:flex items-center gap-2 text-on-surface-variant font-caption-1 text-caption-1">
+            <span class="material-symbols-outlined text-[16px] text-primary">insights</span>
+            <span>Rasio Efisiensi Libur: <strong class="text-on-surface font-semibold">{multiplier} Hari</strong></span>
+        </div>
+    </div>
+</section>
