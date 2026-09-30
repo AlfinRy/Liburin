@@ -86,9 +86,11 @@ export function findBridges(days: DayInfo[]): Bridge[] {
     return bridges;
 }
 
-export function recommend(bridges: Bridge[], quota: number, today = new Date().toISOString().slice(0, 10)): Recommendation {
+const todayISO = () => new Date().toISOString().slice(0, 10);
+
+export function recommend(bridges: Bridge[], quota: number, today: string | null = todayISO()): Recommendation {
     const sorted = bridges
-        .filter((b) => b.streakEnd >= today && b.leaveDates[b.leaveDates.length - 1] >= today)
+        .filter((b) => today === null || (b.streakEnd >= today && b.leaveDates[b.leaveDates.length - 1] >= today))
         .sort(
             (a, b) => b.efficiency - a.efficiency || b.streakDays - a.streakDays
         );
@@ -114,8 +116,8 @@ export function recommend(bridges: Bridge[], quota: number, today = new Date().t
     };
 }
 
-export function topBridges(days: DayInfo[], limit = 3, today = new Date().toISOString().slice(0, 10)): Bridge[] {
-    const all = findBridges(days).filter((b) => b.streakDays >= 3 && b.streakEnd >= today);
+export function topBridges(days: DayInfo[], limit = 3, today: string | null = todayISO()): Bridge[] {
+    const all = findBridges(days).filter((b) => b.streakDays >= 3 && (today === null || b.streakEnd >= today));
     const sorted = [...all].sort(
         (a, b) =>
             b.efficiency - a.efficiency ||

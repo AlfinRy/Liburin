@@ -17,7 +17,7 @@ const { year, quota } = Astro.props;
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
 const bridges = findBridges(days);
-const recommendation = recommend(bridges, quota);
+const recommendation = recommend(bridges, quota, null);
 const images = await Promise.all(
     recommendation.bridges.map((b) => {
         const queries = [...new Set(imageQueriesForBridge(b, days))];
@@ -51,6 +51,30 @@ const total = bridges
 </BaseLayout>
 
 <script>
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(new Date());
+    const allCards = Array.from(document.querySelectorAll<HTMLElement>('.recommendation-card'));
+    const freshCards = allCards.filter((card) => (card.dataset.end ?? '') >= today);
+    allCards.filter((card) => !freshCards.includes(card)).forEach((card) => card.remove());
+
+    if (freshCards.length !== allCards.length) {
+        const gained = freshCards.reduce((sum, c) => sum + Number(c.dataset.streak ?? 0), 0);
+        const used = freshCards.reduce((sum, c) => sum + Number(c.dataset.leave ?? 0), 0);
+        const bonus = Math.max(0, gained - used);
+        const pct = Math.min(96, Math.round((used / Math.max(gained, 1)) * 100));
+        const countEl = document.querySelector('[data-stat-count]');
+        const gainedEl = document.querySelector('[data-stat-gained]');
+        const usedEl = document.querySelector('[data-stat-used]');
+        const bonusEl = document.querySelector('[data-stat-bonus]');
+        const barTaken = document.querySelector<HTMLElement>('[data-stat-bar-taken]');
+        const barBonus = document.querySelector<HTMLElement>('[data-stat-bar-bonus]');
+        if (countEl) countEl.textContent = String(freshCards.length);
+        if (gainedEl) gainedEl.textContent = `${gained} Hari (+${Math.round((gained / Math.max(used, 1) - 1) * 100)}%)`;
+        if (usedEl) usedEl.textContent = `${used} Hari Diambil`;
+        if (bonusEl) bonusEl.textContent = `${bonus} Hari Bridge & Weekend`;
+        if (barTaken) barTaken.style.width = `${pct}%`;
+        if (barBonus) barBonus.style.width = `${100 - pct}%`;
+    }
+
     const filterPills = document.querySelectorAll('.filter-pill');
     const cards = document.querySelectorAll('.recommendation-card');
 

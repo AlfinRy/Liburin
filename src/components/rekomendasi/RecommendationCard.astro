@@ -62,6 +62,10 @@ const stripClass = compact
     class="recommendation-card rounded-2xl border border-surface-container-high bg-surface-container-lowest shadow-tint hover:shadow-tint-lg transition-all duration-200 overflow-hidden flex flex-col"
     data-category={`${category} efficiency`}
     data-period={`${idDate(bridge.streakStart)} - ${idDate(bridge.streakEnd)}`}
+    data-start={bridge.streakStart}
+    data-end={bridge.streakEnd}
+    data-leave={bridge.leaveDates.length}
+    data-streak={bridge.streakDays}
     data-reveal
 >
     <div class="grid md:grid-cols-12 flex-1">

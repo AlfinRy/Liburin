@@ -28,7 +28,7 @@ const takenShare = Math.min(96, Math.round((recommendation.totalLeaveUsed / Math
             <div class="flex flex-wrap items-center gap-2 pt-space-xs" id="filter-container">
                 <button class="filter-pill active-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-semibold transition-all bg-primary text-on-primary flex items-center gap-1.5 cursor-pointer" data-filter="all" type="button">
                     <span>Semua</span>
-                    <span class="tabular-nums">{total}</span>
+                    <span class="tabular-nums" data-stat-count>{total}</span>
                 </button>
                 <button class="filter-pill px-4 py-2 rounded-full font-caption-1 text-caption-1 font-medium text-on-surface-variant bg-surface-container-low hover:bg-surface-container hover:text-on-surface transition-all flex items-center gap-1.5 cursor-pointer" data-filter="efficiency" type="button">
                     <span>Paling efisien</span>
@@ -57,18 +57,18 @@ const takenShare = Math.min(96, Math.round((recommendation.totalLeaveUsed / Math
             <div class="my-space-sm space-y-1.5">
                 <div class="flex justify-between font-caption-2 text-caption-2 text-on-surface-variant">
                     <span>Total libur didapat</span>
-                    <span class="font-semibold text-secondary tabular-nums">
+                    <span class="font-semibold text-secondary tabular-nums" data-stat-gained>
                         {gained} Hari (+{Math.round((gained / Math.max(recommendation.totalLeaveUsed, 1) - 1) * 100)}%)
                     </span>
                 </div>
                 <div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden flex">
-                    <div class="h-full bg-primary rounded-full transition-all duration-500" style={`width: ${takenShare}%;`}></div>
-                    <div class="h-full bg-secondary-fixed-dim rounded-full" style={`width: ${100 - takenShare}%;`}></div>
+                    <div class="h-full bg-primary rounded-full transition-all duration-500" data-stat-bar-taken style={`width: ${takenShare}%;`}></div>
+                    <div class="h-full bg-secondary-fixed-dim rounded-full" data-stat-bar-bonus style={`width: ${100 - takenShare}%;`}></div>
                 </div>
             </div>
             <div class="pt-space-xs flex items-center justify-between font-footnote text-footnote text-on-surface-variant">
-                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> {recommendation.totalLeaveUsed} Hari Diambil</span>
-                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span> {bonus} Hari Bridge & Weekend</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> <span data-stat-used>{recommendation.totalLeaveUsed} Hari Diambil</span></span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span> <span data-stat-bonus>{bonus} Hari Bridge & Weekend</span></span>
             </div>
         </div>
     </div>

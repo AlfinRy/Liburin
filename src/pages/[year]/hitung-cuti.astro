@@ -13,7 +13,7 @@ export function getStaticPaths() {
 const year = resolveYear(Astro.params.year);
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
-const top = topBridges(days, 3);
+const top = topBridges(days, 3, null);
 ---
 
 <BaseLayout
@@ -24,8 +24,20 @@ const top = topBridges(days, 3);
 >
     <div class="flex flex-col w-full">
         <SimulatorSection year={year} holidays={holidays} />
-        <div class="max-w-4xl mx-auto w-full px-margin">
+        <div class="max-w-4xl mx-auto w-full px-margin" data-longweekend-wrap>
             <LongWeekendSection bridges={top} days={days} />
         </div>
     </div>
 </BaseLayout>
+
+<script>
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(new Date());
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-longweekend]'));
+    const fresh = cards.filter((c) => (c.dataset.end ?? '') >= today);
+    cards
+        .filter((c) => !fresh.includes(c))
+        .forEach((c) => c.remove());
+    if (cards.length > 0 && fresh.length === 0) {
+        document.querySelector('[data-longweekend-wrap]')?.remove();
+    }
+</script>

@@ -36,7 +36,7 @@ const monthLabel = (b: Bridge) =>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
         {
             bridges.map((b, i) => (
-                <div class="rounded-xl p-space-md border border-surface-container-high bg-surface-container-lowest shadow-tint hover:shadow-tint-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
+                <div class="rounded-xl p-space-md border border-surface-container-high bg-surface-container-lowest shadow-tint hover:shadow-tint-lg hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between" data-longweekend data-start={b.streakStart} data-end={b.streakEnd} data-reveal style={`--reveal-delay: ${i * 90}ms`}>
                     <div>
                         <div class="flex items-center justify-between mb-space-xs">
                             <span class="font-caption-1 text-caption-1 text-on-surface-variant tabular-nums">{monthLabel(b)}</span>

@@ -17,7 +17,8 @@ export function getStaticPaths() {
 const year = resolveYear(Astro.params.year);
 const holidays = await getHolidays(year);
 const days = buildCalendar(year, holidays);
-const top = topBridges(days, 3);
+const top = topBridges(days, 6, null);
+const heroCandidates = top.slice(0, 3);
 const total = findBridges(days).filter((b) => b.streakDays >= 3)
     .map((b) => `${b._startIndex}-${b._endIndex}`)
     .filter((v, i, a) => a.indexOf(v) === i).length;
@@ -28,12 +29,42 @@ const total = findBridges(days).filter((b) => b.streakDays >= 3)
     activePath="beranda"
     year={year}
 >
-    {top[0] && <HeroSection bridge={top[0]} days={days} year={year} />}
+    {
+        heroCandidates.length > 0 && (
+            <div data-hero-stack>
+                {heroCandidates.map((b, i) => (
+                    <div data-hero data-start={b.streakStart} data-end={b.streakEnd} class={i === 0 ? '' : 'hidden'}>
+                        <HeroSection bridge={b} days={days} year={year} />
+                    </div>
+                ))}
+            </div>
+        )
+    }
     <StatsSection holidays={holidays} days={days} year={year} />
     <SectionDivider bg="bg-surface" fill="text-surface-container-low" />
-    <RecommendationPreview bridges={top} total={total} year={year} />
+    <RecommendationPreview bridges={top.slice(0, 3)} total={total} year={year} />
     <SectionDivider bg="bg-surface-container-low" fill="text-primary" />
     <CalculatorSection year={year} maxQuota={20} holidays={holidays} />
     <SectionDivider bg="bg-primary" fill="text-surface" />
     <HowItWorks />
 </BaseLayout>
+
+<script>
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(new Date());
+
+    const heroes = Array.from(document.querySelectorAll<HTMLElement>('[data-hero]'));
+    const freshHero = heroes.find((h) => (h.dataset.end ?? '') >= today);
+    heroes.forEach((h) => {
+        if (h !== freshHero) h.remove();
+    });
+    if (freshHero) freshHero.classList.remove('hidden');
+
+    const previewCards = Array.from(document.querySelectorAll<HTMLElement>('[data-preview-card]'));
+    const freshPreview = previewCards.filter((c) => (c.dataset.end ?? '') >= today);
+    previewCards
+        .filter((c) => !freshPreview.includes(c))
+        .forEach((c) => c.remove());
+    if (previewCards.length > 0 && freshPreview.length === 0) {
+        document.querySelector('[data-preview-grid]')?.remove();
+    }
+</script>

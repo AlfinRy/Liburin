@@ -29,11 +29,14 @@ const monthOf = (b: Bridge) =>
                 Semua {total} rekomendasi
             </a>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-space-md" data-preview-grid>
             {
                 cards.map((b, i) => (
                     <a
                         href={`/${year}/rekomendasi`}
+                        data-preview-card
+                        data-start={b.streakStart}
+                        data-end={b.streakEnd}
                         class="group flex flex-col rounded-2xl border border-surface-container-high bg-surface-container-lowest p-space-md no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-tint-lg hover:border-primary/40"
                         data-reveal
                         style={`--reveal-delay: ${i * 90}ms`}
