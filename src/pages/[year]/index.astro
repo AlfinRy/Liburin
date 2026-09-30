@@ -8,6 +8,7 @@ import StatsSection from '../../components/beranda/StatsSection.astro';
 import RecommendationPreview from '../../components/beranda/RecommendationPreview.astro';
 import CalculatorSection from '../../components/beranda/CalculatorSection.astro';
 import HowItWorks from '../../components/beranda/HowItWorks.astro';
+import SectionDivider from '../../components/SectionDivider.astro';
 
 export function getStaticPaths() {
     return AVAILABLE_YEARS.map((y) => ({ params: { year: String(y) } }));
@@ -28,8 +29,11 @@ const total = findBridges(days).filter((b) => b.streakDays >= 3)
     year={year}
 >
     {top[0] && <HeroSection bridge={top[0]} days={days} year={year} />}
-    <StatsSection holidays={holidays} days={days} />
+    <StatsSection holidays={holidays} days={days} year={year} />
+    <SectionDivider bg="bg-surface" fill="text-surface-container-low" />
     <RecommendationPreview bridges={top} total={total} year={year} />
+    <SectionDivider bg="bg-surface-container-low" fill="text-primary" />
     <CalculatorSection year={year} maxQuota={20} holidays={holidays} />
+    <SectionDivider bg="bg-primary" fill="text-surface" />
     <HowItWorks />
 </BaseLayout>

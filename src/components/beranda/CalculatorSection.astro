@@ -10,21 +10,33 @@ const { year, maxQuota, holidays } = Astro.props;
 
 <div id="calculator-data" data-holidays={JSON.stringify(holidays)} data-year={year} hidden></div>
 
-<section class="w-full pb-space-xl">
-    <div class="max-w-6xl mx-auto px-6">
+<section class="relative w-full bg-primary py-space-xl overflow-hidden">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <span class="absolute -top-24 -left-24 w-72 h-72 rounded-full border border-on-primary/15"></span>
+        <span class="absolute -top-12 -left-12 w-48 h-48 rounded-full border border-on-primary/10"></span>
+        <span class="absolute -bottom-28 -right-20 w-80 h-80 rounded-full bg-on-primary/10 blur-2xl"></span>
+        <span class="absolute top-10 right-12 w-24 h-24 rounded-full border border-on-primary/15 hidden md:block"></span>
+    </div>
+
+    <div class="relative max-w-6xl mx-auto px-6">
+        <div class="max-w-3xl mb-space-lg">
+            <p class="font-caption-1 text-caption-1 text-on-primary/80 uppercase tracking-[0.14em] font-semibold m-0 mb-space-xs" data-reveal>
+                Simulator cuti
+            </p>
+            <h2 class="font-headline-2 text-headline-2 font-bold text-on-primary m-0" data-reveal style="--reveal-delay: 60ms">
+                Berapa sisa jatah cutimu?
+            </h2>
+            <p class="font-body-default text-body-default text-on-primary/85 mt-1 mb-0" data-reveal style="--reveal-delay: 120ms">
+                Geser untuk melihat potensinya.
+            </p>
+        </div>
+
         <div
-            class="border border-surface-container-high rounded-2xl bg-surface-container-lowest p-space-lg md:p-space-xl shadow-tint"
+            class="border border-surface-container-high rounded-2xl bg-surface-container-lowest p-space-lg md:p-space-xl shadow-tint-lg"
             data-reveal
+            style="--reveal-delay: 180ms"
         >
-            <div class="max-w-3xl">
-                <h2 class="font-headline-2 text-headline-2 font-bold text-on-surface m-0">
-                    Berapa sisa jatah cutimu?
-                </h2>
-                <p class="font-body-default text-body-default text-on-surface-variant mt-1 mb-0">
-                    Geser untuk melihat potensinya.
-                </p>
-            </div>
-            <div class="mt-space-lg grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
+            <div class="mt-0 grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center">
                 <div class="lg:col-span-7 space-y-space-md">
                     <div>
                         <div class="flex justify-between items-center mb-2">
@@ -99,8 +111,8 @@ const { year, maxQuota, holidays } = Astro.props;
     const setFill = (input: HTMLInputElement) => {
         const min = Number(input.min) || 0;
         const max = Number(input.max) || 100;
-        const pct = ((Number(input.value) - min) / (max - min)) * 100;
-        input.style.setProperty('--range-fill', `${pct}%`);
+        const t = (Number(input.value) - min) / (max - min);
+        input.style.setProperty('--range-t', String(t));
     };
     setFill(slider);
 

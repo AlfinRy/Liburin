@@ -5,9 +5,10 @@ import { findBridges } from '../../lib/engine';
 interface Props {
     holidays: Holiday[];
     days: DayInfo[];
+    year: number;
 }
 
-const { holidays, days } = Astro.props;
+const { holidays, days, year } = Astro.props;
 
 const nationals = holidays.filter((h) => !h.isCutiBersama).length;
 const cutiBersama = holidays.filter((h) => h.isCutiBersama).length;
@@ -29,23 +30,36 @@ const golden = findBridges(days).filter((b) => b.streakDays >= 8 && b.leaveDates
     .filter((v, i, a) => a.indexOf(v) === i).length;
 
 const stats = [
-    { value: nationals + cutiBersama, unit: 'hari', text: 'libur resmi' , detail: `${nationals} libur nasional + ${cutiBersama} cuti bersama` },
-    { value: naturalStreaks, unit: 'periode', text: 'long weekend tanpa cuti', detail: '3+ hari beruntun' },
-    { value: golden, unit: 'periode', text: 'libur 8+ hari', detail: 'cukup 2–3 hari cuti' },
+    { icon: 'event', value: nationals + cutiBersama, unit: 'hari', text: 'libur resmi', detail: `${nationals} libur nasional + ${cutiBersama} cuti bersama` },
+    { icon: 'beach_access', value: naturalStreaks, unit: 'periode', text: 'long weekend tanpa cuti', detail: '3+ hari beruntun' },
+    { icon: 'auto_awesome', value: golden, unit: 'periode', text: 'libur 8+ hari', detail: 'cukup 2–3 hari cuti' },
 ];
 ---
 
-<section class="w-full pb-space-xl">
+<section class="w-full pb-space-xl pt-space-sm">
     <div class="max-w-6xl mx-auto px-6">
-        <dl class="grid grid-cols-1 sm:grid-cols-3 border-t border-surface-container-high">
+        <p class="font-caption-1 text-caption-1 text-on-surface-variant uppercase tracking-[0.14em] font-semibold m-0 mb-space-md" data-reveal>
+            Sekilas {year}
+        </p>
+        <dl class="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
             {
                 stats.map((s, i) => (
-                    <div class="py-space-md sm:px-space-md sm:first:pl-0 sm:border-l sm:first:border-l-0 border-surface-container-high" data-reveal style={`--reveal-delay: ${i * 100}ms`}>
-                        <dd class="font-headline-1 text-headline-1 font-bold text-on-surface tabular-nums m-0">
+                    <div
+                        class="relative rounded-2xl border border-surface-container-high bg-surface-container-lowest p-space-md overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-tint"
+                        data-reveal
+                        style={`--reveal-delay: ${i * 100}ms`}
+                    >
+                        <span class="absolute -top-5 -right-5 w-20 h-20 rounded-full bg-primary-fixed/25" aria-hidden="true"></span>
+                        <div class="relative flex items-center gap-2 mb-space-sm">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed-variant">
+                                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">{s.icon}</span>
+                            </span>
+                            <dt class="font-body-default text-body-default font-semibold text-on-surface m-0">{s.text}</dt>
+                        </div>
+                        <dd class="relative font-headline-1 text-headline-1 font-bold text-on-surface tabular-nums m-0">
                             {s.value} <span class="font-body-default text-body-default font-medium text-on-surface-variant">{s.unit}</span>
                         </dd>
-                        <dt class="font-body-default text-body-default font-semibold text-on-surface mt-1 m-0">{s.text}</dt>
-                        <p class="font-footnote text-footnote text-on-surface-variant mt-0.5 mb-0">{s.detail}</p>
+                        <p class="relative font-footnote text-footnote text-on-surface-variant mt-1 mb-0">{s.detail}</p>
                     </div>
                 ))
             }

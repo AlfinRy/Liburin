@@ -1,31 +1,48 @@
 ---
 const steps = [
     {
+        icon: 'edit_calendar',
         title: 'Masukkan sisa cuti',
-        desc: 'Sisa cutimu hari ini.',
+        desc: 'Sebutkan sisa cutimu, sisanya biar Liburin yang hitung.',
     },
     {
+        icon: 'search',
         title: 'Algoritma cari hari kejepit',
-        desc: 'Cuti dijepit di antara libur dan weekend.',
+        desc: 'Cuti dijepit di antara libur nasional dan weekend supaya bonus liburnya maksimal.',
     },
     {
+        icon: 'celebration',
         title: 'Dapat rencana cuti',
-        desc: 'Rangkaian libur terpanjang, siap diajukan.',
+        desc: 'Rangkaian libur terpanjang, lengkap dengan tanggal, siap diajukan ke atasan.',
     },
 ];
 ---
 
-<section class="w-full pb-space-xl">
+<section class="w-full py-space-xl">
     <div class="max-w-6xl mx-auto px-6">
-        <h2 class="font-headline-2 text-headline-2 font-bold text-on-surface m-0 mb-space-md">
+        <p class="font-caption-1 text-caption-1 text-on-surface-variant uppercase tracking-[0.14em] font-semibold m-0 mb-space-xs" data-reveal>
+            Tanpa ribet
+        </p>
+        <h2 class="font-headline-2 text-headline-2 font-bold text-on-surface m-0 mb-space-lg" data-reveal style="--reveal-delay: 60ms">
             Cara kerjanya
         </h2>
-        <ol class="grid grid-cols-1 md:grid-cols-3 gap-space-lg list-none m-0 p-0">
+        <ol class="grid grid-cols-1 md:grid-cols-3 gap-space-md list-none m-0 p-0">
             {
                 steps.map((s, i) => (
-                <li class="border-t border-surface-container-high pt-space-sm" data-reveal style={`--reveal-delay: ${i * 90}ms`}>
-                        <p class="font-caption-1 text-caption-1 text-primary font-bold tabular-nums m-0">{i + 1}</p>
-                        <h3 class="font-headline-3 text-headline-3 font-semibold text-on-surface mt-1 mb-1">{s.title}</h3>
+                    <li
+                        class="relative flex flex-col rounded-2xl border border-surface-container-high bg-surface-container-lowest p-space-md transition-all duration-200 hover:-translate-y-1 hover:shadow-tint"
+                        data-reveal
+                        style={`--reveal-delay: ${i * 90}ms`}
+                    >
+                        <div class="flex items-center gap-space-sm mb-space-sm">
+                            <span class="flex items-center justify-center w-10 h-10 rounded-full bg-primary text-on-primary shrink-0">
+                                <span class="material-symbols-outlined text-[20px]" aria-hidden="true">{s.icon}</span>
+                            </span>
+                            <span class="font-display-hero text-headline-1 font-bold text-surface-container-highest leading-none tabular-nums m-0">
+                                {String(i + 1).padStart(2, '0')}
+                            </span>
+                        </div>
+                        <h3 class="font-headline-3 text-headline-3 font-semibold text-on-surface mt-0 mb-1">{s.title}</h3>
                         <p class="font-body-default text-body-default text-on-surface-variant m-0">{s.desc}</p>
                     </li>
                 ))

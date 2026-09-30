@@ -38,7 +38,7 @@ const cell = (day: DayInfo) => {
     if (day.status === 'libur_nasional')
         return { cls: 'bg-tertiary-container/15 text-tertiary', dot: 'bg-tertiary text-on-tertiary', label: 'Nasional', short: 'Nas' };
     if (day.status === 'cuti_bersama')
-        return { cls: 'bg-secondary-fixed/40 text-secondary', dot: 'bg-secondary text-on-secondary', label: 'Cuti Bersama', short: 'CB' };
+        return { cls: 'bg-secondary-fixed/40 text-secondary', dot: 'bg-secondary text-on-secondary', label: 'Cuti Bersama', short: 'CutBer' };
     if (day.status === 'weekend')
         return { cls: 'bg-surface-container-high text-on-surface-variant', dot: 'bg-surface-container-highest text-on-surface', label: 'Weekend', short: 'W-end' };
     return { cls: 'bg-surface-container-high text-on-surface-variant opacity-80', dot: 'bg-surface-container-highest text-on-surface', label: 'Kantor', short: 'Kantor' };

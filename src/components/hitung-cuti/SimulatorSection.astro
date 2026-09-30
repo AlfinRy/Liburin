@@ -169,15 +169,15 @@ const { year, holidays } = Astro.props;
     const setFill = (input: HTMLInputElement) => {
         const min = Number(input.min) || 0;
         const max = Number(input.max) || 100;
-        const pct = ((Number(input.value) - min) / (max - min)) * 100;
-        input.style.setProperty('--range-fill', `${pct}%`);
+        const t = (Number(input.value) - min) / (max - min);
+        input.style.setProperty('--range-t', String(t));
     };
 
     function updateUI() {
-        setFill(leaveSlider!);
         const stats = compute(currentLeave);
         leaveValEl!.textContent = String(currentLeave);
         leaveSlider!.value = String(currentLeave);
+        setFill(leaveSlider!);
         summaryCuti!.textContent = `${currentLeave} hari`;
         summaryLibur!.textContent = `${stats.totalStreakDays} hari libur`;
         multiplierBadge!.textContent = `${(stats.totalStreakDays / Math.max(stats.totalLeaveUsed, 1)).toFixed(1)}×`;

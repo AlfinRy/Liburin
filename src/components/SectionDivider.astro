@@ -1,0 +1,14 @@
+---
+interface Props {
+    bg?: string;
+    fill?: string;
+}
+
+const { bg = 'bg-surface', fill = 'text-surface-container-low' } = Astro.props;
+---
+
+<div class={`w-full overflow-hidden ${bg} ${fill}`} style="line-height:0" aria-hidden="true">
+    <svg class="block w-full h-8 md:h-12" viewBox="0 0 1440 70" preserveAspectRatio="none">
+        <path d="M0,70 C180,8 400,0 720,30 C1040,60 1260,62 1440,16 L1440,70 Z" fill="currentColor"></path>
+    </svg>
+</div>

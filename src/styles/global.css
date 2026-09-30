@@ -278,6 +278,7 @@
     }
 
     input[type='range'] {
+        --range-thumb-size: 22px;
         -webkit-appearance: none;
         appearance: none;
         background: transparent;
@@ -289,8 +290,8 @@
         background: linear-gradient(
             to right,
             var(--color-primary) 0%,
-            var(--color-primary) var(--range-fill, 50%),
-            var(--color-surface-container-highest) var(--range-fill, 50%),
+            var(--color-primary) calc(var(--range-t, 0.5) * (100% - var(--range-thumb-size)) + var(--range-thumb-size) / 2),
+            var(--color-surface-container-highest) calc(var(--range-t, 0.5) * (100% - var(--range-thumb-size)) + var(--range-thumb-size) / 2),
             var(--color-surface-container-highest) 100%
         );
     }
@@ -300,8 +301,8 @@
         background: linear-gradient(
             to right,
             var(--color-primary) 0%,
-            var(--color-primary) var(--range-fill, 50%),
-            var(--color-surface-container-highest) var(--range-fill, 50%),
+            var(--color-primary) calc(var(--range-t, 0.5) * (100% - var(--range-thumb-size)) + var(--range-thumb-size) / 2),
+            var(--color-surface-container-highest) calc(var(--range-t, 0.5) * (100% - var(--range-thumb-size)) + var(--range-thumb-size) / 2),
             var(--color-surface-container-highest) 100%
         );
     }
@@ -318,8 +319,8 @@
         transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.18s ease;
     }
     input[type='range']::-moz-range-thumb {
-        height: 16px;
-        width: 16px;
+        height: 22px;
+        width: 22px;
         border-radius: 50%;
         background: var(--color-primary);
         border: 3px solid var(--color-surface-container-lowest);

@@ -59,6 +59,21 @@ const MONTH_QUERIES = [
     'jakarta skyline dusk',
 ];
 
+const BRIDGE_QUERIES = [
+    'long weekend beach hammock relax',
+    'staycation resort pool lounger',
+    'road trip tropical coast scooter',
+    'camping tent mountain sunrise',
+    'island hopping boat tropical',
+    'floating pool villa relaxing',
+    'hiking trail green hills',
+    'surfing wave tropical beach',
+    'waterfall jungle swimming',
+    'picnic park lake sunset',
+    'lounge chair ocean view',
+    'year end holiday resort pool',
+];
+
 export function imageQueriesForBridge(bridge: Bridge, days: DayInfo[], max = 2): string[] {
     const byDate = new Map(days.map((d) => [d.date, d]));
     const names: string[] = [];
@@ -71,7 +86,11 @@ export function imageQueriesForBridge(bridge: Bridge, days: DayInfo[], max = 2):
         const info = byDate.get(iso);
         if (info?.name && !names.includes(info.name)) names.push(info.name);
     }
-    const fallback = MONTH_QUERIES[Number(bridge.streakStart.slice(5, 7)) - 1];
+    const month = Number(bridge.streakStart.slice(5, 7)) - 1;
+    const fallback = MONTH_QUERIES[month];
+    if (!names.length) {
+        return [BRIDGE_QUERIES[month], fallback];
+    }
     return names
         .slice(0, max)
         .map((name) => HOLIDAY_QUERIES.find(([pattern]) => pattern.test(name))?.[1] ?? fallback);

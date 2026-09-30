@@ -43,7 +43,7 @@ const cellClass = (day: DayInfo) => {
 const label = (day: DayInfo) => {
     if (leaveSet.has(day.date)) return 'Cuti';
     if (day.status === 'libur_nasional') return 'Libur';
-    if (day.status === 'cuti_bersama') return 'CB';
+    if (day.status === 'cuti_bersama') return 'CutBer';
     if (day.status === 'weekend') return 'Weekend';
     return 'Kerja';
 };
