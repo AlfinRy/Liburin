@@ -1,4 +1,5 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import type { Holiday } from './types';
 
@@ -15,7 +16,17 @@ interface ApiResponse {
     data: ApiHoliday[];
 }
 
-const DATA_DIR = path.join(process.cwd(), 'src', 'data', 'holidays');
+function resolveDataDir(): string {
+    try {
+        return path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'data', 'holidays');
+    } catch {
+        return path.join(process.cwd(), 'src', 'data', 'holidays');
+    }
+}
+
+const DATA_DIR = resolveDataDir();
+
+const storedFiles = import.meta.glob<{ default: Holiday[] }>('../data/holidays/*.json', { eager: true });
 
 function normalizeBase(base: string): string {
     return base
@@ -29,12 +40,9 @@ function dataFile(year: number): string {
 }
 
 async function readStored(year: number): Promise<Holiday[] | null> {
-    try {
-        const parsed = JSON.parse(await readFile(dataFile(year), 'utf8')) as Holiday[];
-        return Array.isArray(parsed) ? parsed : null;
-    } catch {
-        return null;
-    }
+    const key = `../data/holidays/${year}.json`;
+    const parsed = storedFiles[key]?.default;
+    return Array.isArray(parsed) && parsed.length ? parsed : null;
 }
 
 async function store(year: number, holidays: Holiday[]): Promise<void> {

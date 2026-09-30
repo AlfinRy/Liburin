@@ -179,7 +179,7 @@ const { year, holidays } = Astro.props;
         leaveSlider!.value = String(currentLeave);
         setFill(leaveSlider!);
         summaryCuti!.textContent = `${currentLeave} hari`;
-        summaryLibur!.textContent = `${stats.totalStreakDays} hari libur`;
+        summaryLibur!.textContent = ` ${stats.totalStreakDays} hari libur`;
         multiplierBadge!.textContent = `${(stats.totalStreakDays / Math.max(stats.totalLeaveUsed, 1)).toFixed(1)}×`;
         efficiencyPercent!.textContent = `${Math.min(95, Math.round((stats.totalStreakDays / Math.max(currentLeave, 1)) * 12))}% Optimal`;
 

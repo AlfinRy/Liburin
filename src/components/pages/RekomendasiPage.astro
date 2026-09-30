@@ -109,14 +109,6 @@ const total = bridges
         }, 2800);
     }
 
-    document.querySelectorAll('[data-save-plan]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const card = btn.closest('.recommendation-card') as HTMLElement | null;
-            const period = card?.dataset.period ?? 'rencana';
-            showToast(`Rencana "${period}" masuk draft cuti.`);
-        });
-    });
-
     document.querySelectorAll('[data-share-plan]').forEach((btn) => {
         btn.addEventListener('click', () => {
             const detail = (btn as HTMLElement).dataset.detail ?? '';
@@ -130,8 +122,8 @@ const total = bridges
                     })
                     .catch(() => {});
             } else {
-                navigator.clipboard.writeText(`${title} - ${detail}. Rencanakan di Liburin!`);
-                showToast('Tautan ringkasan disalin ke clipboard!');
+                navigator.clipboard.writeText(`${title} - ${detail}. ${window.location.href}`);
+                showToast('Rencana cuti disalin ke clipboard!');
             }
         });
     });
