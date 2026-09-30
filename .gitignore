@@ -26,3 +26,9 @@ docs/beranda_page/
 docs/hitungcuti_page/
 docs/kalendertahunan_page/
 docs/rekomendasi_page/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example

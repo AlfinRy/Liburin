@@ -50,13 +50,14 @@ const {
         <script is:inline>
             (function () {
                 try {
-                    var stored = localStorage.getItem('liburin-theme');
-                    var theme =
-                        stored === 'dark' || stored === 'light'
-                            ? stored
-                            : window.matchMedia('(prefers-color-scheme: dark)').matches
-                              ? 'dark'
-                              : 'light';
+                    // var stored = localStorage.getItem('liburin-theme');
+                    // var theme =
+                    //     stored === 'dark' || stored === 'light'
+                    //         ? stored
+                    //         : window.matchMedia('(prefers-color-scheme: dark)').matches
+                    //           ? 'dark'
+                    //           : 'light';
+                    var theme = 'light';
                     document.documentElement.dataset.theme = theme;
                 } catch (e) {
                     document.documentElement.dataset.theme = 'light';
@@ -77,6 +78,7 @@ const {
         </main>
         <Footer year={year} />
         <script>
+            /*
             const themeToggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
             const themeIcon = themeToggle?.querySelector('.material-symbols-outlined');
             const themeColor = document.querySelector<HTMLMetaElement>('meta[data-theme-color]');
@@ -103,6 +105,7 @@ const {
                     applyTheme(next);
                 });
             }
+            */
 
             const revealables = document.querySelectorAll('[data-reveal]');
             if ('IntersectionObserver' in window && revealables.length) {

@@ -8,13 +8,16 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
+    "preview": "npm run build && wrangler dev",
     "astro": "astro",
     "refresh-photos": "node -e \"require('fs').rmSync('node_modules/.cache/liburin-unsplash.json',{force:true});console.log('Cache foto dihapus. Pool baru akan diambil saat halaman berikutnya dirender.')\"",
-    "refresh-holidays": "node scripts/refresh-holidays.mjs"
+    "refresh-holidays": "node scripts/refresh-holidays.mjs",
+    "generate-types": "wrangler types",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
+    "@astrojs/cloudflare": "^14.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.5",
     "tailwindcss": "^4.3.3",
@@ -24,6 +27,7 @@
     "esbuild": true
   },
   "devDependencies": {
-    "@types/node": "^26.6.3"
+    "@types/node": "^26.6.3",
+    "wrangler": "^4.144.0"
   }
 }
