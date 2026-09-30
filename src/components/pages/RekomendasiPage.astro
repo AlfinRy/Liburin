@@ -128,14 +128,56 @@ const total = bridges
         });
     });
 
+    const ymd = (iso: string) => iso.replace(/-/g, '');
+    const nextDay = (iso: string) => {
+        const d = new Date(`${iso}T00:00:00`);
+        d.setDate(d.getDate() + 1);
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    };
+
+    const plans = freshCards.map((card) => ({
+        period: card.dataset.period ?? 'Rencana cuti',
+        leaveDates: JSON.parse(card.dataset.leaveDates ?? '[]') as string[],
+    }));
+    const allLeaveDates = plans.flatMap((p) => p.leaveDates);
+    if (!allLeaveDates.length) {
+        document.querySelector('[data-sync-actions]')?.remove();
+    }
+
     document.querySelectorAll('[data-export]').forEach((btn) => {
         btn.addEventListener('click', () => {
+            if (!allLeaveDates.length) return;
             const type = (btn as HTMLElement).dataset.export;
-            showToast(
-                type === 'gcal'
-                    ? 'Menghubungkan Google Calendar…'
-                    : 'Berkas .ics berhasil diunduh.'
-            );
+
+            if (type === 'ics') {
+                const stamp = `${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`;
+                const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Liburin//Rencana Cuti//ID', 'CALSCALE:GREGORIAN'];
+                for (const plan of plans) {
+                    for (const date of plan.leaveDates) {
+                        lines.push(
+                            'BEGIN:VEVENT',
+                            `UID:${date}-${plan.period.replace(/\s+/g, '')}@liburin`,
+                            `DTSTAMP:${stamp}`,
+                            `DTSTART;VALUE=DATE:${ymd(date)}`,
+                            `DTEND;VALUE=DATE:${ymd(nextDay(date))}`,
+                            `SUMMARY:Cuti — ${plan.period} (Liburin)`,
+                            'END:VEVENT'
+                        );
+                    }
+                }
+                lines.push('END:VCALENDAR');
+                const blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'liburin-rencana-cuti.ics';
+                link.click();
+                URL.revokeObjectURL(link.href);
+                showToast('Berkas .ics berhasil diunduh.');
+            } else {
+                const segments = allLeaveDates.map((d) => `${ymd(d)}/${ymd(nextDay(d))}`).join(',');
+                const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Rencana Cuti — Liburin')}&dates=${segments}`;
+                window.open(url, '_blank', 'noopener');
+            }
         });
     });
 </script>
