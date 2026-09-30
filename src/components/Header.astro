@@ -22,14 +22,20 @@ const yearOptions = AVAILABLE_YEARS;
 <header class="fixed top-0 left-0 right-0 z-50 bg-surface/85 border-b border-surface-container-high/80 backdrop-blur-xl backdrop-saturate-150">
     <div class="h-16 max-w-6xl mx-auto px-6 flex items-center justify-between gap-space-md">
         <a href={navItems[0].href} class="flex items-center gap-2.5 no-underline text-inherit group/logo">
-            <div
-                class="h-7 w-7 rounded-lg bg-primary text-on-primary flex items-center justify-center shadow-tint transition-transform duration-200 group-hover/logo:scale-105"
-            >
-                <span class="material-symbols-outlined text-[18px]">event_available</span>
-            </div>
-            <span class="font-headline-3 text-headline-3 text-on-surface font-bold tracking-tight">
-                Liburin
-            </span>
+            <img
+                src="/liburin-wordmark-light.png"
+                alt="Liburin"
+                class="h-8 w-auto object-contain logo-lightmode"
+                width="110"
+                height="40"
+            />
+            <img
+                src="/liburin-wordmark-dark.png"
+                alt="Liburin"
+                class="h-8 w-auto object-contain logo-darkmode"
+                width="110"
+                height="40"
+            />
             <span
                 class="hidden sm:inline font-caption-1 text-caption-1 text-on-surface-variant tabular-nums px-1.5 py-0.5 rounded-md bg-surface-container"
             >

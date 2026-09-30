@@ -267,6 +267,16 @@
         );
     }
 
+    .logo-darkmode {
+        display: none;
+    }
+    html[data-theme='dark'] .logo-lightmode {
+        display: none;
+    }
+    html[data-theme='dark'] .logo-darkmode {
+        display: inline-block;
+    }
+
     input[type='range'] {
         accent-color: var(--color-primary);
     }
